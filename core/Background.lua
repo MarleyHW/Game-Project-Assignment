@@ -1,4 +1,4 @@
-local Class = require "hump.class"
+local Class = require("libs.hump.class")
 local bgSky = love.graphics.newImage("bg/sky.png")
 local bgClouds = love.graphics.newImage("bg/clouds.png")
 local bgBeach = love.graphics.newImage("bg/beach.png")
