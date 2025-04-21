@@ -1,4 +1,4 @@
-local Push = require "push"
+local Push = require("engine.push")
 local Background = require "Background"
 local Surfer = require "Surfer" 
 local ObstacleCourse = require "ObstacleCourse"
