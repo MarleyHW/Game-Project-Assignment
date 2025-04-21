@@ -158,9 +158,6 @@ function love.draw()
 end
 
 function drawStartState()
-    bg:drawBackground()
-    bg:drawWave()
-    bg:drawForeground()
     -- Show game title
     love.graphics.printf("TIDE RIDER", titleFont, 0, 100, gameWidth, "center")
     love.graphics.printf("Press Enter to Play", instructionFont, 0, 180, gameWidth, "center")
@@ -197,22 +194,25 @@ function drawPlayUI()
 end
 
 function drawGameOverState()
-    bg:drawBackground()
-    bg:drawWave()
-    bg:drawForeground()
-    
+    -- Title
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.printf("Wipeout!", titleFont, 0, 100, gameWidth, "center")
-    love.graphics.printf("Score: "..math.floor(lastScore), scoreFont, 0, 160, gameWidth, "center")
-    love.graphics.printf("High Score: "..math.floor(highScore), scoreFont, 0, 200, gameWidth, "center")
-    
+
+    -- Score Info
+    love.graphics.printf("Score: " .. math.floor(lastScore), scoreFont, 0, 160, gameWidth, "center")
+    love.graphics.printf("High Score: " .. math.floor(highScore), scoreFont, 0, 200, gameWidth, "center")
+
     if skins:hasNewUnlock() then
         love.graphics.printf("New Skin Unlocked!", scoreFont, 0, 240, gameWidth, "center")
     end
-    
+
+    -- Instructions
+    love.graphics.setColor(1, 1, 1, 0.8)
     love.graphics.printf("Press Enter to Play Again", instructionFont, 0, 280, gameWidth, "center")
     love.graphics.printf("Press S to view skins", instructionFont, 0, 310, gameWidth, "center")
     love.graphics.printf("Press Esc to exit", instructionFont, 0, 340, gameWidth, "center")
 end
+
 
 function drawPauseState()
     love.graphics.printf("Paused", titleFont, 0, 100, gameWidth, "center")
