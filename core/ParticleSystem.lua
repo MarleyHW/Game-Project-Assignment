@@ -1,9 +1,9 @@
 -- Based on Explosion.lua from Jewels code 
 local Class = require "libs.hump.class"
-local imgSplash = love.graphics.newImage("graphics/particles/splash.png")
-local imgSparkle = love.graphics.newImage("graphics/particles/sparkle.png")
-local imgWake = love.graphics.newImage("graphics/particles/wake.png")
-local imgHeart = love.graphics.newImage("graphics/particles/heart.png")
+local imgSplash = love.graphics.newImage("assets/graphics/splash.png")
+local imgSparkle = love.graphics.newImage("assets/graphics/sparkle.png")
+local imgWake = love.graphics.newImage("assets/graphics/wake.png")
+local imgHeart = love.graphics.newImage("assets/graphics/heart.png")
 local ParticleSystem = Class{}
 
 function ParticleSystem:init()
@@ -98,6 +98,12 @@ function ParticleSystem:createLifeJacketEffect(x, y)
     self.lifeJacketSystem:emit(20)
 end
 
+
+function ParticleSystem:createTrickEffect(x, y)
+    self.splashSystem:setPosition(x, y)
+    self.splashSystem:emit(25)
+end
+
 function ParticleSystem:setWakePosition(x, y)
     self.wakeSystem:setPosition(x, y)
 end
@@ -107,5 +113,11 @@ function ParticleSystem:isActive()
            self.collectSystem:getCount() > 0 or
            self.lifeJacketSystem:getCount() > 0
 end
+
+function ParticleSystem:createCollisionEffect(x, y)
+    self.splashSystem:setPosition(x, y)
+    self.splashSystem:emit(40)
+end
+
 
 return ParticleSystem

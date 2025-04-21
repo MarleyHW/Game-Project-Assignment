@@ -85,6 +85,13 @@ function Surfer:update(dt)
     elseif self.y > gameHeight - 150 then
         self.y = gameHeight - 150
     end
+    if self.scoreTimer and self.scoreTimer > 0 then
+        self.scoreTimer = self.scoreTimer - dt
+        if self.scoreTimer <= 0 then
+            self.scoreText = nil
+        end
+    end
+    
 end
 function Surfer:draw()
     -- Draw with flashing effect when invincible
@@ -92,6 +99,10 @@ function Surfer:draw()
         love.graphics.setColor(1, 1, 1, 0.5)
     else
         love.graphics.setColor(1, 1, 1, 1)
+    end
+    if self.scoreText then
+        love.graphics.setColor(1, 1, 0, 1)
+        love.graphics.printf(self.scoreText, 0, self.y - 40, gameWidth, "center")
     end
     
     love.graphics.draw(surferSprites[self.currentAnimation][self.currentFrame], self.x, self.y)
@@ -110,6 +121,12 @@ function Surfer:move(direction)
         self.targetY = gameHeight/2 - 80 + (self.verticalPosition - 2) * 80
     end
 end
+function Surfer:showScoreIndicator(text)
+    -- To show a temporary score pop up 
+    self.scoreText = text
+    self.scoreTimer = 2 
+end
+
 function Surfer:startTrick(trickType)
     if not self.performingTrick then
         self.performingTrick = true
@@ -141,4 +158,13 @@ function Surfer:endTrick()
     self.currentFrame = 1
     self.animationTime = 0
 end
+
+function Surfer:moveUp()
+    self:move("up")
+end
+
+function Surfer:moveDown()
+    self:move("down")
+end
+
 return Surfer

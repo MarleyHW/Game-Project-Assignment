@@ -9,12 +9,15 @@ local Push = require("engine.push")
 local Background = require("core.Background")
 local Utils = require("core.Utils")
 local UI = require("core.UI")
+local ParticleSystem = require("core.ParticleSystem")
+
 
 -- Objects
 local Surfer = require("objects.Surfer")
 local Obstacle = require("objects.Obstacle")
 local ObstacleCourse = require("objects.ObstacleCourse")
-local CollectableSystem = require("objects.CollectableSystem")
+local CollectibleSystem = require("objects.CollectibleSystem")
+
 
 -- Systems
 local TrickSystem = require("systems.TrickSystem")
@@ -50,15 +53,16 @@ function love.load()
     particles = ParticleSystem()
     skins = SkinUnlocks()
     tricks = TrickSystem()
+    collectibles = CollectibleSystem()
     sounds = {} 
-    sounds['music'] = love.audio.newSource("sounds/beach_music.mp3", "static")
-    sounds['trick'] = love.audio.newSource("sounds/trick.wav", "static")
-    sounds['trick_land'] = love.audio.newSource("sounds/trick_land.wav", "static")
-    sounds['collect'] = love.audio.newSource("sounds/collect.wav", "static")
-    sounds['life'] = love.audio.newSource("sounds/life.wav", "static")
-    sounds['splash'] = love.audio.newSource("sounds/splash.wav", "static")
-    sounds['collision'] = love.audio.newSource("sounds/impact.wav", "static")
-    sounds['gameover'] = love.audio.newSource("sounds/gameover.wav", "static")
+    sounds['music']       = love.audio.newSource("assets/sounds/beach_music.mp3", "static")
+    sounds['trick']       = love.audio.newSource("assets/sounds/trick.wav", "static")
+    sounds['trick_land']  = love.audio.newSource("assets/sounds/trick_land.wav", "static")
+    sounds['collect']     = love.audio.newSource("assets/sounds/collect.wav", "static")
+    sounds['life']        = love.audio.newSource("assets/sounds/life.wav", "static")
+    sounds['splash']      = love.audio.newSource("assets/sounds/splash.wav", "static")
+    sounds['collision']   = love.audio.newSource("assets/sounds/impact.wav", "static")
+    sounds['gameover']    = love.audio.newSource("assets/sounds/gameover.wav", "static")
     -- Start background music
     sounds['music']:setLooping(true)
     sounds['music']:play()
@@ -88,8 +92,17 @@ function love.update(dt)
         obsCourse:update(dt, difficultyMultiplier)
         particles:update(dt)
         tricks:update(dt)
+        collectibles:update(dt, difficultyMultiplier)
         -- Check for collectibles
-        obsCourse:checkCollectibles(surfer, particles)
+        local collectedType = collectibles:checkCollisions(surfer)
+        if collectedType == "seashell" then
+            particles:createCollectEffect(surfer.x, surfer.y)
+            sounds["collect"]:play()
+        elseif collectedType == "lifejacket" then
+            particles:createLifeJacketEffect(surfer.x, surfer.y)
+            sounds["life"]:play()
+            lives = math.min(maxLives, lives + 1)
+        end
         -- Check for collisions
         if obsCourse:collision(surfer) then
             particles:createCollisionEffect(surfer.x, surfer.y)
@@ -163,6 +176,7 @@ function drawPlayState()
     particles:draw()
     surfer:draw()
     bg:drawForeground()
+    collectibles:draw()
     drawPlayUI()
     if debugFlag then
         love.graphics.print("FPS: "..love.timer.getFPS(), 10, gameHeight-20)
@@ -177,7 +191,7 @@ function drawPlayUI()
     -- Show lives
     love.graphics.print("Lives: "..lives, scoreFont, 10, 40)
     
-    if tricks:isActive() then
+    if tricks:isTrickActive() then
         love.graphics.printf(tricks:getCurrentTrick().name, scoreFont, 0, gameHeight - 50, gameWidth, "center")
     end
 end
@@ -227,7 +241,7 @@ function resetGame()
     currentScore = 0
     difficultyMultiplier = 1
     timePlayed = 0
-    
+    collectibles = CollectibleSystem()
     gameState = "play"
 end
 
@@ -271,7 +285,7 @@ function handlePlayKeypresses(key)
     end
     -- Trick controls
     if key == "w" or key == "a" or key == "s" or key == "d" then
-        if not tricks:isActive() then
+        if not tricks:isTrickActive() then
             local trickStarted = tricks:startTrick(key)
             if trickStarted then
                 sounds["trick"]:play()

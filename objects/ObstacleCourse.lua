@@ -1,5 +1,5 @@
 local Class = require("libs.hump.class")
-local Obstacle = require "Obstacle"
+local Obstacle = require("objects.Obstacle")
 local ObstacleCourse = Class{}
 
 function ObstacleCourse:init()

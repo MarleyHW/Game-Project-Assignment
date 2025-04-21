@@ -167,6 +167,20 @@ end
 function TrickSystem:isTrickActive()
     return self.currentTrick ~= nil
 end
+function TrickSystem:isCompleted()
+    return not self:isTrickActive() and self.successIndicatorTime == 0
+end
+
+function TrickSystem:getPoints()
+    return self.successPoints or 0
+end
+
+function TrickSystem:getCurrentTrick()
+    return {
+        name = self.currentTrick or "",
+        difficulty = self.trickDifficulty or "easy"
+    }
+end
 
 function TrickSystem:drawTrickIndicator()
     if self.currentTrick then
