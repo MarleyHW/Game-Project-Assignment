@@ -1,9 +1,9 @@
 local Class = require("libs.hump.class")
-local bgSky = love.graphics.newImage("bg/sky.png")
-local bgClouds = love.graphics.newImage("bg/clouds.png")
-local bgBeach = love.graphics.newImage("bg/beach.png")
-local bgWave = love.graphics.newImage("bg/wave.png")
-local bgFoam = love.graphics.newImage("bg/foam.png")
+local bgSky = love.graphics.newImage("assets/bg/sky.png")
+local bgClouds = love.graphics.newImage("assets/bg/clouds.png")
+local bgBeach = love.graphics.newImage("assets/bg/beach.png")
+local bgWave = love.graphics.newImage("assets/bg/wave.png")
+local bgFoam = love.graphics.newImage("assets/bg/foam.png")
 local Background = Class{}
 function Background:init()
     self.skyPos = 0
