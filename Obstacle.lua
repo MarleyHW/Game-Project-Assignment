@@ -39,3 +39,44 @@ function Obstacle:init(lanePosition)
     self.active = true
     self.scored = false
 end
+
+function Obstacle:update(dt, speedMultiplier)
+    -- Move obstacle
+    self.x = self.x - self.speed * speedMultiplier * dt
+    -- Animate bobbing up and down
+    self.bobHeight = self.bobHeight + self.bobDirection * self.bobSpeed * dt
+    if math.abs(self.bobHeight) > 5 then
+        self.bobDirection = -self.bobDirection
+    end
+    -- Rotate obstacle a little
+    self.rotation = self.rotation + dt * 0.1
+    if self.x + self.width < 0 then
+        self.active = false
+    end
+end
+
+function Obstacle:draw()
+    -- Draw with bobbing animation
+    love.graphics.draw(
+        self.sprite, 
+        self.x, 
+        self.y + self.bobHeight, 
+        self.rotation, 
+        1, 1, 
+        0, 0 
+    )
+    if debugFlag then
+        love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+    end
+end
+
+function Obstacle:collision(surfer)
+    -- Check for collision with surfer
+    if not self.active then return false end
+    local colX = self.x + self.width >= surfer.x and surfer.x + surfer.width >= self.x
+    local colY = self.y + self.height >= surfer.y and surfer.y + surfer.height >= self.y
+    
+    return colX and colY
+end
+
+return Obstacle
