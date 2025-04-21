@@ -1,4 +1,4 @@
-local Class = require "hump.class"
+local Class = require("libs.hump.class")
 local Obstacle = require "Obstacle"
 local ObstacleCourse = Class{}
 

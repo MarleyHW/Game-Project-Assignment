@@ -1,4 +1,4 @@
-local Class = require "hump.class"
+local Class = require("libs.hump.class")
 local Timer = require "hump.timer"
 -- Load obstacle sprites
 local obstacleSprites = {}

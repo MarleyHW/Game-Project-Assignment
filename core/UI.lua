@@ -1,5 +1,5 @@
 local Class = require "libs.hump.class"
-local lifeIcon = love.graphics.newImage("ui/life.png")
+local lifeIcon = love.graphics.newImage("assets/bg/life.png")
 local UI = Class{}
 
 function UI:init()

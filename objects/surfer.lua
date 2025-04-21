@@ -1,21 +1,22 @@
-local Class = require "hump.class"
+local Class = require("libs.hump.class")
 local surferSprites = {}
 surferSprites["idle"] = {}
-surferSprites["idle"][1] = love.graphics.newImage("sprites/surfer_idle1.png")
-surferSprites["idle"][2] = love.graphics.newImage("sprites/surfer_idle2.png")
-surferSprites["idle"][3] = love.graphics.newImage("sprites/surfer_idle3.png")
+surferSprites["idle"][1] = love.graphics.newImage("assets/sprites/surfer_idle1.png")
+surferSprites["idle"][2] = love.graphics.newImage("assets/sprites/surfer_idle2.png")
+surferSprites["idle"][3] = love.graphics.newImage("assets/sprites/surfer_idle3.png")
 surferSprites["trick1"] = {}
-surferSprites["trick1"][1] = love.graphics.newImage("sprites/surfer_trick1_1.png")
-surferSprites["trick1"][2] = love.graphics.newImage("sprites/surfer_trick1_2.png")
-surferSprites["trick1"][3] = love.graphics.newImage("sprites/surfer_trick1_3.png")
+surferSprites["trick1"][1] = love.graphics.newImage("assets/sprites/surfer_trick1_1.png")
+surferSprites["trick1"][2] = love.graphics.newImage("assets/sprites/surfer_trick1_2.png")
+surferSprites["trick1"][3] = love.graphics.newImage("assets/sprites/surfer_trick1_3.png")
 surferSprites["trick2"] = {}
-surferSprites["trick2"][1] = love.graphics.newImage("sprites/surfer_trick2_1.png")
-surferSprites["trick2"][2] = love.graphics.newImage("sprites/surfer_trick2_2.png")
-surferSprites["trick2"][3] = love.graphics.newImage("sprites/surfer_trick2_3.png")
+surferSprites["trick2"][1] = love.graphics.newImage("assets/sprites/surfer_trick2_1.png")
+surferSprites["trick2"][2] = love.graphics.newImage("assets/sprites/surfer_trick2_2.png")
+surferSprites["trick2"][3] = love.graphics.newImage("assets/sprites/surfer_trick2_3.png")
 surferSprites["trick3"] = {}
-surferSprites["trick3"][1] = love.graphics.newImage("sprites/surfer_trick3_1.png")
-surferSprites["trick3"][2] = love.graphics.newImage("sprites/surfer_trick3_2.png")
-surferSprites["trick3"][3] = love.graphics.newImage("sprites/surfer_trick3_3.png")
+surferSprites["trick3"][1] = love.graphics.newImage("assets/sprites/surfer_trick3_1.png")
+surferSprites["trick3"][2] = love.graphics.newImage("assets/sprites/surfer_trick3_2.png")
+surferSprites["trick3"][3] = love.graphics.newImage("assets/sprites/surfer_trick3_3.png")
+
 -- Define the Surfer class
 local Surfer = Class{}
 function Surfer:init() 
