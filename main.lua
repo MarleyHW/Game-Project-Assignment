@@ -1,11 +1,25 @@
+-- Libraries
+local Class = require("libs.hump.class")
+local Timer = require("libs.hump.timer")
+
+-- Engine
 local Push = require("engine.push")
-local Background = require "Background"
-local Surfer = require "Surfer" 
-local ObstacleCourse = require "ObstacleCourse"
-local ParticleSystem = require "ParticleSystem"
-local Utils = require "Utils"
-local SkinUnlocks = require "SkinUnlocks"
-local TrickSystem = require "TrickSystem"
+
+-- Core
+local Background = require("core.Background")
+local Utils = require("core.Utils")
+local UI = require("core.UI")
+
+-- Objects
+local Surfer = require("objects.Surfer")
+local Obstacle = require("objects.Obstacle")
+local ObstacleCourse = require("objects.ObstacleCourse")
+local CollectableSystem = require("objects.CollectableSystem")
+
+-- Systems
+local TrickSystem = require("systems.TrickSystem")
+local SkinUnlocks = require("systems.SkinsUnlock")
+
 -- Global variables
 gameWidth = 640
 gameHeight = 480
