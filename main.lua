@@ -52,8 +52,17 @@ function love.load()
     obsCourse = ObstacleCourse()
     particles = ParticleSystem()
     skins = SkinUnlocks()
-    tricks = TrickSystem()
+    tricks = TrickSystem(surfer)
     collectibles = CollectibleSystem()
+
+    -- Debug initial positions
+    print(string.format("Surfer initial position: x=%.2f, y=%.2f, w=%.2f, h=%.2f", surfer.x, surfer.y, surfer.width, surfer.height))
+    for i, obstacle in ipairs(obsCourse.obstacles) do
+        print(string.format("Obstacle %d initial position: x=%.2f, y=%.2f, w=%.2f, h=%.2f, lane=%d", 
+            i, obstacle.x, obstacle.y, obstacle.width, obstacle.height, obstacle.lanePosition))
+    end
+    sounds = {}
+
     sounds = {} 
     sounds['music']       = love.audio.newSource("assets/sounds/beach_music.mp3", "static")
     sounds['trick']       = love.audio.newSource("assets/sounds/trick.wav", "static")
@@ -234,7 +243,7 @@ end
 function resetGame()
     surfer = Surfer()
     obsCourse = ObstacleCourse()
-    tricks = TrickSystem()
+    tricks = TrickSystem(surfer)
     particles = ParticleSystem()
     
     lives = 3
