@@ -23,6 +23,10 @@ local CollectibleSystem = require("objects.CollectibleSystem")
 local TrickSystem = require("systems.TrickSystem")
 local SkinUnlocks = require("systems.SkinsUnlock")
 
+-- TitleScreen
+local beachTitleBG = love.graphics.newImage("assets/bg/beach.png")
+
+
 -- Global variables
 gameWidth = 1024
 gameHeight = 768
@@ -172,21 +176,28 @@ function love.draw()
 end
 
 function drawStartState()
-    -- Beach Background
-    bg:drawBackground()
-    bg:drawWave()
+    local bgScaleX = gameWidth / beachTitleBG:getWidth()
+    local bgScaleY = gameHeight / beachTitleBG:getHeight()
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(beachTitleBG, 0, 0, 0, bgScaleX, bgScaleY)
+
+    -- Arcade Title
     love.graphics.setFont(titleFont)
-    love.graphics.setColor(1, 0.9, 0.1, 1)
-    love.graphics.printf("TIDE RIDER", 0, 100, gameWidth, "center")
+    love.graphics.setColor(1, 1, 0.2, 1)
+    love.graphics.printf("TIDE RIDER", 0, 60, gameWidth, "center")
+
+    -- Flashing Enter Text
     local alpha = 0.5 + 0.5 * math.sin(love.timer.getTime() * 4)
-    love.graphics.setFont(scoreFont)
     love.graphics.setColor(1, 1, 1, alpha)
-    love.graphics.printf("Press Enter to Ride", 0, 200, gameWidth, "center")
-    love.graphics.setColor(1, 1, 1, 0.9)
+    love.graphics.setFont(scoreFont)
+    love.graphics.printf("Press Enter to Ride", 0, 160, gameWidth, "center")
+
+    -- Controls
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(instructionFont)
-    love.graphics.printf("↑ ↓ to surf lanes", 0, 260, gameWidth, "center")
-    love.graphics.printf("W A S D for tricks", 0, 285, gameWidth, "center")
-    love.graphics.printf("S to style up", 0, 320, gameWidth, "center")
+    love.graphics.printf("↑ ↓ to surf lanes", 0, 220, gameWidth, "center")
+    love.graphics.printf("W A S D for tricks", 0, 240, gameWidth, "center")
+    love.graphics.printf("S to change surfer style", 0, 270, gameWidth, "center")
 end
 
 
