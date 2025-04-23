@@ -2,7 +2,7 @@ local Class = require("libs.hump.class")
 local surferSprites = {
     love.graphics.newImage("assets/sprites/surfer1.png"),
     love.graphics.newImage("assets/sprites/surfer2.png"),
-    love.graphics.newImage("assets/sprites/surfer_idle3.png")
+    love.graphics.newImage("assets/sprites/surfer3.png")
 }
 -- Define the Surfer class
 local Surfer = Class{}

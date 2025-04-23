@@ -18,7 +18,6 @@ local ObstacleCourse = require("objects.ObstacleCourse")
 local CollectibleSystem = require("objects.CollectibleSystem")
 
 -- Systems
-local TrickSystem = require("systems.TrickSystem")
 local SkinUnlocks = require("systems.SkinsUnlock")
 
 -- TitleScreen
@@ -56,7 +55,6 @@ function love.load()
     obsCourse = ObstacleCourse()
     particles = ParticleSystem()
     skins = SkinUnlocks()
-    tricks = TrickSystem(surfer)
     collectibles = CollectibleSystem()
 
 
@@ -69,14 +67,12 @@ function love.load()
     sounds = {}
 
     sounds = {} 
-    sounds['music'] = love.audio.newSource("assets/sounds/beach_music.mp3", "static")
-    sounds['trick'] = love.audio.newSource("assets/sounds/trick.wav", "static")
-    sounds['trick_land'] = love.audio.newSource("assets/sounds/trick_land.wav", "static")
-    sounds['collect'] = love.audio.newSource("assets/sounds/collect.wav", "static")
-    sounds['life'] = love.audio.newSource("assets/sounds/life.wav", "static")
-    sounds['splash'] = love.audio.newSource("assets/sounds/splash.wav", "static")
-    sounds['collision'] = love.audio.newSource("assets/sounds/impact.wav", "static")
-    sounds['gameover'] = love.audio.newSource("assets/sounds/gameover.wav", "static")
+    sounds['music'] = love.audio.newSource("assets/sounds/west-coast-surf-instrumental-208062.mp3", "static")
+    sounds['collect'] = love.audio.newSource("assets/sounds/collect-5930.mp3", "static")
+    sounds['life'] = love.audio.newSource("assets/sounds/heavenly-choir-of-angels-322708.mp3", "static")
+    sounds['splash'] = love.audio.newSource("assets/sounds/water-splash-199583.mp3", "static")
+    sounds['collision'] = love.audio.newSource("assets/sounds/negative_beeps-6008.mp3", "static")
+    sounds['gameover'] = love.audio.newSource("assets/sounds/falled-sound-effect-278635.mp3", "static")
     -- Start background music
     sounds['music']:setLooping(true)
     sounds['music']:play()
@@ -107,7 +103,6 @@ function love.update(dt)
         surfer:update(dt)
         obsCourse:update(dt, difficultyMultiplier)
         particles:update(dt)
-        tricks:update(dt)
         collectibles:update(dt, difficultyMultiplier)
         -- Check for collectibles
         local collectedType = collectibles:checkCollisions(surfer)
@@ -149,21 +144,6 @@ end
 
 function handleScoring(dt)
     currentScore = currentScore + dt
-    -- Check if trick is completed
-    if tricks:isCompleted() then
-        local points = tricks:getPoints()
-        scoreTween = Utils.newTween(0, 0, points, 0.5, 
-            function(value)
-                surfer:showScoreIndicator("+"..(math.floor(value)))
-            end,
-            function()
-                currentScore = currentScore + points
-                sounds["trick_land"]:play()
-                scoreTween = nil
-            end
-        )
-        particles:createTrickEffect(surfer.x, surfer.y)
-    end
 end
 
 function love.draw()
@@ -226,10 +206,6 @@ function drawPlayUI()
     love.graphics.print("Score: "..math.floor(currentScore), scoreFont, 10, 10)
     -- Show lives
     love.graphics.print("Lives: "..lives, scoreFont, 10, 40)
-    
-    if tricks:isTrickActive() then
-        love.graphics.printf(tricks:getCurrentTrick().name, scoreFont, 0, gameHeight - 50, gameWidth, "center")
-    end
 end
 
 function drawGameOverState()
@@ -294,7 +270,6 @@ end
 function resetGame()
     surfer = Surfer()
     obsCourse = ObstacleCourse()
-    tricks = TrickSystem(surfer)
     particles = ParticleSystem()
     
     lives = 3
@@ -342,17 +317,5 @@ function handlePlayKeypresses(key)
         surfer:moveUp()
     elseif key == "down" then
         surfer:moveDown()
-    end
-    -- Trick controls
-    if key == "w" or key == "a" or key == "s" or key == "d" then
-        if not tricks:isTrickActive() then
-            local trickStarted = tricks:startTrick(key)
-            if trickStarted then
-                sounds["trick"]:play()
-                surfer:doTrickAnimation(tricks:getCurrentTrick().difficulty)
-            end
-        else
-            tricks:addInput(key)
-        end
     end
 end

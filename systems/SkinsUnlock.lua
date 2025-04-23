@@ -20,7 +20,7 @@ function SkinUnlocks:init()
             name = "Champion",
             unlocked = false,
             scoreRequirement = 500,
-            preview = love.graphics.newImage("assets/sprites/surfer_idle3.png")
+            preview = love.graphics.newImage("assets/sprites/surfer3.png")
         }
     }
     -- Currently selected skin

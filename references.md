@@ -2,3 +2,10 @@
 - driftwood.png: Image by rawpixel.com, https://www.rawpixel.com/image/15420701/dry-wood-driftwood-smoke-pipe
 - surfer1.png: Image by rawpixel.com, https://www.rawpixel.com/image/10106698/png-person-cartoon
 - surfer2.png: Image by rawpixel.com, https://www.rawpixel.com/image/10106708/png-person-cartoon
+- surfer3.png: Image by rawpixel.com, https://www.rawpixel.com/image/13216388/png-man-surfing-cartoon-mammal-sports-generated-image-rawpixel
+- west-coast-surf-instrumental-208062: Music by Fae Spencer from Pixabay, https://pixabay.com/users/faespencer-31790355/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=208062
+- collect-5930: Sound Effect by freesound_community from Pixabay, https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=5930
+- heavenly-choir-of-angels-322708: Sound Effect by I Love Jesus Christ from Pixabay, https://pixabay.com/users/jesuschristisgod-44370300/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=322708"
+- water-splash-199583: Sound Effect by Universfield from Pixabay, https://pixabay.com/users/universfield-28281460/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=199583
+- negative_beeps-6008: Sound Effect by freesound_community from Pixabay, https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6008
+- falled-sound-effect-278635: Sound Effect by Qbertapply from Pixabay, https://pixabay.com/users/qbertapply-47746050/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=278635
