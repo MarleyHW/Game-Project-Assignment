@@ -80,23 +80,27 @@ end
 function Collectible:collision(surfer)
     -- Check for collision with surfer
     if not self.active or self.collected then return false end
-    -- Simple AABB collision
-    local colX = self.x + self.width >= surfer.x and surfer.x + surfer.width >= self.x
-    local colY = self.y + self.height >= surfer.y and surfer.y + surfer.height >= self.y
+    
+    local baseScale = 0.1
+    local collectibleWidth = self.width * baseScale
+    local collectibleHeight = self.height * baseScale
+    
+    local colX = self.x + collectibleWidth >= surfer.x and surfer.x + surfer.width * 0.15 >= self.x
+    local colY = self.y + collectibleHeight >= surfer.y and surfer.y + surfer.height * 0.15 >= self.y
+    
     return colX and colY
 end
+
 -- CollectibleSystem class to manage all collectibles
 local CollectibleSystem = Class{}
 
 function CollectibleSystem:init()
     self.collectibles = {}
     self.spawnTimer = 0
-    -- Time between seashell spawns
-    self.seashellInterval = 3.0 
-    -- Time between lifejacket spawns
-    self.lifejacketInterval = 15.0 
-    self.seashellTimer = 0
-    self.lifejacketTimer = 0
+    -- Time between collectible spawns (10 seconds)
+    self.spawnInterval = 10.0
+    -- Probability of spawning a lifejacket vs seashell (20% chance)
+    self.lifejacketProbability = 0.2
 end
 
 function CollectibleSystem:update(dt, difficultyMultiplier)
@@ -104,29 +108,29 @@ function CollectibleSystem:update(dt, difficultyMultiplier)
     for i, collectible in ipairs(self.collectibles) do
         collectible:update(dt, difficultyMultiplier)
     end
+    
     -- Remove inactive collectibles
     for i = #self.collectibles, 1, -1 do
         if not self.collectibles[i].active then
             table.remove(self.collectibles, i)
         end
     end
-    -- Spawn new seashells
-    self.seashellTimer = self.seashellTimer + dt
-    if self.seashellTimer >= self.seashellInterval then
-        self.seashellTimer = 0
-        -- Adjust spawn rate based on difficulty
-        self.seashellInterval = math.max(1.5, 3.0 - difficultyMultiplier * 0.5)
-        -- Create new seashell in random lane
-        local newSeashell = Collectible("seashell", math.random(1, 3))
-        table.insert(self.collectibles, newSeashell)
-    end
-    -- Spawn new lifejackets less frequently
-    self.lifejacketTimer = self.lifejacketTimer + dt
-    if self.lifejacketTimer >= self.lifejacketInterval then
-        self.lifejacketTimer = 0
-        -- Create new lifejacket in random lane
-        local newLifejacket = Collectible("lifejacket", math.random(1, 3))
-        table.insert(self.collectibles, newLifejacket)
+    
+    -- Spawn new collectibles every 10 seconds
+    self.spawnTimer = self.spawnTimer + dt
+    if self.spawnTimer >= self.spawnInterval then
+        self.spawnTimer = 0
+        
+        -- Determine collectible type (seashell or lifejacket)
+        local collectibleType = "seashell"
+        if math.random() < self.lifejacketProbability then
+            collectibleType = "lifejacket"
+        end
+        
+        -- Create new collectible in random lane
+        local randomLane = math.random(1, 3)
+        local newCollectible = Collectible(collectibleType, randomLane)
+        table.insert(self.collectibles, newCollectible)
     end
 end
 

@@ -92,11 +92,6 @@ function Surfer:draw()
         love.graphics.setColor(1, 1, 1, 1)
     end
 
-    -- Show score popup
-    if self.scoreText then
-        love.graphics.printf(self.scoreText, 0, self.y - 40, gameWidth, "center")
-    end
-
     -- Draw the surfer sprite
     local drawScale = 0.20
     love.graphics.draw(

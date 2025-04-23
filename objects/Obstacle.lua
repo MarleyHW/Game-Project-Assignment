@@ -23,11 +23,11 @@ function Obstacle:init(lanePosition)
     
     -- Set vertical position based on lane
     if lanePosition == 1 then
-        self.y = gameHeight/2 - 80
+        self.y = gameHeight/2 - 60
     elseif lanePosition == 2 then 
         self.y = gameHeight/2
     else -- Bottom lane
-        self.y = gameHeight/2 + 80
+        self.y = gameHeight - 130
     end
     
     -- Animation properties
