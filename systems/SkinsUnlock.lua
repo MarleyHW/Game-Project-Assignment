@@ -29,6 +29,7 @@ function SkinUnlocks:init()
 end
 
 function SkinUnlocks:checkUnlocks(score)
+    -- Checking if skin has been unlocked
     local hadNewUnlock = false
     for i, skin in ipairs(self.skins) do
         if not skin.unlocked and score >= skin.scoreRequirement then
@@ -48,7 +49,7 @@ function SkinUnlocks:draw()
     local itemHeight = 150
     local spacing = 30
     local startX = (screenWidth - (itemWidth * gridSize + spacing * (gridSize - 1))) / 2
-    local startY = 120
+    local startY = 200
     for i, skin in ipairs(self.skins) do
         local x = startX + (i-1) * (itemWidth + spacing)
         local y = startY

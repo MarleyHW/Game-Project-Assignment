@@ -7,11 +7,14 @@ function UI:init()
     self.scoreScale = 1
     self.scorePulse = false
     self.scorePulseTime = 0
+
     -- Previous score for animation
     self.prevScore = 0
+
     -- Tween for score display
     self.displayScore = 0
     self.targetScore = 0
+
     -- UI positions
     self.scoreX = 10
     self.scoreY = 10
@@ -26,9 +29,11 @@ function UI:update(dt, score)
         self.scorePulse = true
         self.scorePulseTime = 0
     end
+
     if self.displayScore < self.targetScore then
         self.displayScore = math.min(self.targetScore, self.displayScore + dt * 50)
     end
+
     -- Update score pulse animation
     if self.scorePulse then
         self.scorePulseTime = self.scorePulseTime + dt
@@ -44,18 +49,22 @@ end
 function UI:drawScore(score)
     -- Update the target score
     self.targetScore = score
+
     -- Calculate tween if needed
     if math.abs(self.displayScore - self.targetScore) > 0.1 then
         self.displayScore = self.displayScore + (self.targetScore - self.displayScore) * 0.1
     else
         self.displayScore = self.targetScore
     end
+
     -- Draw score with scaling effect
     love.graphics.setFont(scoreFont)
+
     -- Draw background glow for readability
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.printf("SCORE: " .. math.floor(self.displayScore), 
         self.scoreX + 2, self.scoreY + 2, 200, "left")
+        
     -- Draw score with scaling effect if pulsing
     if self.scorePulse then
         love.graphics.setColor(1, 1, 0, 1)
@@ -85,13 +94,6 @@ end
 function UI:drawHighScore(highScore)
     love.graphics.setFont(regularFont)
     love.graphics.printf("HIGH SCORE: " .. highScore, 0, gameHeight - 40, gameWidth, "center")
-end
-
-function UI:drawTrickCombo(combo)
-    love.graphics.setFont(regularFont)
-    love.graphics.setColor(1, 1, 1, 0.8)
-    love.graphics.printf("COMBO: " .. combo, 0, gameHeight - 70, gameWidth, "center")
-    love.graphics.setColor(1, 1, 1, 1)
 end
 
 return UI

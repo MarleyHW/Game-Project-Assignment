@@ -20,7 +20,7 @@ local CollectibleSystem = require("objects.CollectibleSystem")
 -- Systems
 local SkinUnlocks = require("systems.SkinsUnlock")
 
--- TitleScreen
+-- Beach title screen
 local beachTitleBG = love.graphics.newImage("assets/bg/beach.png")
 
 -- Global variables
@@ -37,6 +37,7 @@ timePlayed = 0
 currentSkin = 1
 scoreTween = nil
 speedTween = nil
+
 function love.load()
     love.window.setTitle("Tide Rider")
     windowWidth, windowHeight = love.graphics.getDimensions()
@@ -48,7 +49,8 @@ function love.load()
         fullscreen = false,
         resizable = true,
         canvas = true
-    })    
+    })
+    
     -- Initialize game objects
     bg = Background()
     surfer = Surfer()
@@ -56,15 +58,6 @@ function love.load()
     particles = ParticleSystem()
     skins = SkinUnlocks()
     collectibles = CollectibleSystem()
-
-
-    -- Debug initial positions
-    print(string.format("Surfer initial position: x=%.2f, y=%.2f, w=%.2f, h=%.2f", surfer.x, surfer.y, surfer.width, surfer.height))
-    for i, obstacle in ipairs(obsCourse.obstacles) do
-        print(string.format("Obstacle %d initial position: x=%.2f, y=%.2f, w=%.2f, h=%.2f, lane=%d", 
-            i, obstacle.x, obstacle.y, obstacle.width, obstacle.height, obstacle.lanePosition))
-    end
-    sounds = {}
 
     sounds = {} 
     sounds['music'] = love.audio.newSource("assets/sounds/west-coast-surf-instrumental-208062.mp3", "static")
@@ -104,7 +97,7 @@ function love.update(dt)
         obsCourse:update(dt, difficultyMultiplier)
         particles:update(dt)
         collectibles:update(dt, difficultyMultiplier)
-        -- Check for collectibles
+        -- Check for collecttibles (seashells and life jackets)
         local collectedType = collectibles:checkCollisions(surfer)
         if collectedType == "seashell" then
             particles:createCollectEffect(surfer.x, surfer.y)
@@ -123,7 +116,7 @@ function love.update(dt)
             sounds["collision"]:play()
             lives = lives - 1
 
-            -- Enable temporary invincibility
+            -- Enable temporary invincibility after colliding with obstacle
             surfer.invincible = true
             surfer.invincibleTime = 2
             surfer.invincibleFlash = 0
@@ -137,7 +130,7 @@ function love.update(dt)
             end
         end
 
-        -- Update score based on time and tricks
+        -- Update score based on time
         handleScoring(dt)
     end
 end
@@ -168,18 +161,18 @@ function drawStartState()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(beachTitleBG, 0, 0, 0, bgScaleX, bgScaleY)
 
-    -- Arcade Title
+    -- Start screen
     love.graphics.setFont(titleFont)
     love.graphics.setColor(0, 0.5, 1)
     love.graphics.printf("TIDE RIDER", 0, 60, gameWidth, "center")
 
-    -- Flashing Start Game Text
+    -- Game start text flashing to make it more noticeable
     local alpha = 0.5 + 0.5 * math.sin(love.timer.getTime() * 4)
     love.graphics.setColor(0, 0.8, 1, alpha)
     love.graphics.setFont(scoreFont)
     love.graphics.printf("Press Enter to Ride", 0, 180, gameWidth, "center")
 
-    -- Controls
+    -- List of controls
     love.graphics.setColor(0, 0.8, 1, 1)
     love.graphics.setFont(instructionFont)
     love.graphics.printf("Up or Down Arrows to Surf", 0, 260, gameWidth, "center")
@@ -187,6 +180,7 @@ function drawStartState()
 end
 
 function drawPlayState()
+    -- Drawing the whole game
     bg:drawBackground()
     bg:drawForeground()
     obsCourse:draw()
@@ -194,6 +188,7 @@ function drawPlayState()
     particles:draw()
     surfer:draw()
     drawPlayUI()
+
     if debugFlag then
         love.graphics.print("FPS: "..love.timer.getFPS(), 10, gameHeight-20)
         love.graphics.print("Difficulty: "..string.format("%.2f", difficultyMultiplier), 10, gameHeight-40)
@@ -202,9 +197,8 @@ function drawPlayState()
 end
 
 function drawPlayUI()
-    -- Show score
+    -- Show score and lives
     love.graphics.print("Score: "..math.floor(currentScore), scoreFont, 10, 10)
-    -- Show lives
     love.graphics.print("Lives: "..lives, scoreFont, 10, 40)
 end
 
@@ -220,18 +214,18 @@ function drawGameOverState()
     love.graphics.setColor(0, 0, 0)
     love.graphics.printf("Wipeout!", 0, 60, gameWidth, "center")
 
-    -- Score Info
+    -- Score info
     love.graphics.setFont(scoreFont)
     love.graphics.setColor(0, 0.8, 1, 1)
     love.graphics.printf("Score: " .. math.floor(lastScore), 0, 180, gameWidth, "center")
     love.graphics.printf("High Score: " .. math.floor(highScore), 0, 210, gameWidth, "center")
 
-    -- Skin Unlock (if applicable)
+    -- Skin unlock (if applicable)
     if skins:hasNewUnlock() then
         love.graphics.printf("New Skin Unlocked!", 0, 400, gameWidth, "center")
     end
 
-    -- Flashing Play Again Prompt
+    -- Flashing play again prompt
     local alpha = 0.5 + 0.5 * math.sin(love.timer.getTime() * 4)
     love.graphics.setColor(0, 0.8, 1, alpha)
     love.graphics.setFont(scoreFont)
@@ -244,27 +238,27 @@ function drawGameOverState()
     love.graphics.printf("Press Esc to exit", 0, 370, gameWidth, "center")
 end
 
+function drawSkinsMenu()
+    bg:drawBackground()
+    
+    -- Menu for unlockable skins
+    love.graphics.setColor(0, 1, 1)
+    love.graphics.printf("Surfer Skins", titleFont, 0, 60, gameWidth, "center")
+    love.graphics.printf("Press Enter to select", instructionFont, 0, 480, gameWidth, "center")
+    love.graphics.printf("Press B to go back", instructionFont, 0, 510, gameWidth, "center")
+
+    love.graphics.setFont(scoreFont)
+    love.graphics.printf("High Score: " .. math.floor(highScore), 0, 400, gameWidth, "center")
+
+    love.graphics.setColor(1, 1, 1, 1)
+    -- Drawing the surfer skins
+    skins:draw()
+end
 
 function drawPauseState()
     love.graphics.printf("Paused", titleFont, 0, 100, gameWidth, "center")
     love.graphics.printf("Press P to resume", instructionFont, 0, 180, gameWidth, "center")
     love.graphics.printf("Press Esc to quit", instructionFont, 0, 210, gameWidth, "center")
-end
-
-function drawSkinsMenu()
-    bg:drawBackground()
-    
-    love.graphics.printf("Surfer Skins", titleFont, 0, 60, gameWidth, "center")
-    
-    skins:draw()
-    
-    love.graphics.printf("Press Enter to select", instructionFont, 0, 380, gameWidth, "center")
-    love.graphics.printf("Press B to go back", instructionFont, 0, 410, gameWidth, "center")
-
-    love.graphics.setFont(scoreFont)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.printf("High Score: " .. math.floor(highScore), 0, 100, gameWidth, "center")
-
 end
 
 function resetGame()

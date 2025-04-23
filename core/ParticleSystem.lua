@@ -17,6 +17,7 @@ function ParticleSystem:init()
     self.wakeActive = true
 end
 
+-- Particles for splashing waves
 function ParticleSystem:initSplashSystem()
     self.splashSystem = love.graphics.newParticleSystem(imgSplash, 100)
     self.splashSystem:setSizes(0.03, 0.06, 0.02)
@@ -29,6 +30,7 @@ function ParticleSystem:initSplashSystem()
     self.splashSystem:setSpread(math.pi * 0.5)
 end
 
+-- Particles for collecting a seashell
 function ParticleSystem:initCollectSystem()
     self.collectSystem = love.graphics.newParticleSystem(imgSparkle, 50)
     self.collectSystem:setParticleLifetime(0.3, 0.7)
@@ -41,6 +43,7 @@ function ParticleSystem:initCollectSystem()
     self.collectSystem:setSpread(math.pi * 2)
 end
 
+-- Particles for wake in water
 function ParticleSystem:initWakeSystem()
     self.wakeSystem = love.graphics.newParticleSystem(imgWake, 200)
     self.wakeSystem:setParticleLifetime(0.5, 1.0)
@@ -53,6 +56,7 @@ function ParticleSystem:initWakeSystem()
     self.wakeSystem:setPosition(gameWidth/3 - 30, gameHeight/2 + 40)
 end
 
+-- Particles for picking up a life jacket
 function ParticleSystem:initLifeJacketSystem()
     self.lifeJacketSystem = love.graphics.newParticleSystem(imgHeart, 30)
     self.lifeJacketSystem:setParticleLifetime(0.5, 1.2)
@@ -96,12 +100,6 @@ end
 function ParticleSystem:createLifeJacketEffect(x, y)
     self.lifeJacketSystem:setPosition(x, y)
     self.lifeJacketSystem:emit(20)
-end
-
-
-function ParticleSystem:createTrickEffect(x, y)
-    self.splashSystem:setPosition(x, y)
-    self.splashSystem:emit(25)
 end
 
 function ParticleSystem:setWakePosition(x, y)

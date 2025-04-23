@@ -20,7 +20,7 @@ function Collectible:init(type, lanePosition)
     if lanePosition == 1 then 
         self.y = gameHeight/2 - 80
     elseif lanePosition == 2 then 
-        self.y = gameHeight/2
+        self.y = gameHeight/2 - 40
     else 
         self.y = gameHeight/2 + 80
     end

@@ -4,7 +4,7 @@ local surferSprites = {
     love.graphics.newImage("assets/sprites/surfer2.png"),
     love.graphics.newImage("assets/sprites/surfer3.png")
 }
--- Define the Surfer class
+
 local Surfer = Class{}
 function Surfer:init() 
     -- Position
@@ -35,29 +35,18 @@ function Surfer:init()
     self.moveSpeed = 400
     self.moveDistance = 100  -- How far to move up/down with each key press
     self.targetY = self.y
-    -- Tricks
-    self.performingTrick = false
-    self.currentTrick = nil
-    self.trickTimer = 0
-    self.trickDuration = 0
     self.sprites = surferSprites
 end 
+
 function Surfer:update(dt)
-    -- Smooth vertical movement
+    -- Moving surfer up and down
     if math.abs(self.y - self.targetY) > 2 then
         local direction = (self.targetY > self.y) and 1 or -1
         self.y = self.y + direction * self.moveSpeed * dt
     else
         self.y = self.targetY
     end
-    -- Update trick state
-    if self.performingTrick then
-        self.trickTimer = self.trickTimer + dt
-        if self.trickTimer >= self.trickDuration then
-            self.performingTrick = false
-            self.currentAnimation = "idle"
-        end
-    end
+    
     -- Update invincibility
     if self.invincible then
         self.invincibleTime = self.invincibleTime - dt
@@ -67,15 +56,16 @@ function Surfer:update(dt)
             self.invincible = false
         end
     end
-    -- Boundary check
-    if self.y < gameHeight / 2 then
-        self.y = gameHeight / 2
-        self.targetY =  gameHeight / 2
+
+    -- Check if player is staying within boundary
+    if self.y < gameHeight / 2 - 80 then
+        self.y = gameHeight / 2 - 80
+        self.targetY =  gameHeight / 2 - 80
     elseif self.y > gameHeight - 70 then
         self.y = gameHeight - 70
         self.targetY = gameHeight - 70
     end
-    
+
     if self.scoreTimer and self.scoreTimer > 0 then
         self.scoreTimer = self.scoreTimer - dt
         if self.scoreTimer <= 0 then
@@ -92,7 +82,7 @@ function Surfer:draw()
         love.graphics.setColor(1, 1, 1, 1)
     end
 
-    -- Draw the surfer sprite
+    -- Drawing the surfer sprite
     local drawScale = 0.20
     love.graphics.draw(
         self.sprite,
@@ -114,12 +104,12 @@ function Surfer:draw()
 end
 
 function Surfer:moveUp()
-    -- Move up by moveDistance, but don't exceed new upper boundary
+    -- Move up by moveDistance, but don't exceed upper boundary
     self.targetY = math.max(5, self.y - self.moveDistance)
 end
 
 function Surfer:moveDown()
-    -- Move down by moveDistance, but don't exceed new lower boundary
+    -- Move down by moveDistance, but don't exceed lower boundary
     self.targetY = math.min(gameHeight - 5, self.y + self.moveDistance)
 end
 
@@ -127,39 +117,6 @@ function Surfer:showScoreIndicator(text)
     -- To show a temporary score pop up 
     self.scoreText = text
     self.scoreTimer = 2 
-end
-
-function Surfer:startTrick(trickType)
-    if not self.performingTrick then
-        self.performingTrick = true
-        self.currentTrick = trickType
-        -- Set animation based on difficulty
-        if trickType == "easy" then
-            self.currentAnimation = "trick1"
-            self.trickDuration = 1.0
-        elseif trickType == "medium" then
-            self.currentAnimation = "trick2"
-            self.trickDuration = 2.0
-        elseif trickType == "hard" then
-            self.currentAnimation = "trick3"
-            self.trickDuration = 3.0
-        end
-        
-        self.trickTimer = 0
-        self.currentFrame = 1
-        self.animationTime = 0
-        
-        return true
-    end
-    
-    return false
-end
-
-function Surfer:endTrick()
-    self.performingTrick = false
-    self.currentAnimation = "idle"
-    self.currentFrame = 1
-    self.animationTime = 0
 end
 
 function Surfer:changeSkin(skinIndex)
