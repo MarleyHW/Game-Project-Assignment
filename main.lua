@@ -172,13 +172,24 @@ function love.draw()
 end
 
 function drawStartState()
-    -- Show game title
-    love.graphics.printf("TIDE RIDER", titleFont, 0, 100, gameWidth, "center")
-    love.graphics.printf("Press Enter to Play", instructionFont, 0, 180, gameWidth, "center")
-    love.graphics.printf("UP/DOWN arrows to move", instructionFont, 0, 220, gameWidth, "center")
-    love.graphics.printf("WASD keys for tricks", instructionFont, 0, 240, gameWidth, "center")
-    love.graphics.printf("Press S to select skin", instructionFont, 0, 280, gameWidth, "center")
+    -- Beach Background
+    bg:drawBackground()
+    bg:drawWave()
+    love.graphics.setFont(titleFont)
+    love.graphics.setColor(1, 0.9, 0.1, 1)
+    love.graphics.printf("TIDE RIDER", 0, 100, gameWidth, "center")
+    local alpha = 0.5 + 0.5 * math.sin(love.timer.getTime() * 4)
+    love.graphics.setFont(scoreFont)
+    love.graphics.setColor(1, 1, 1, alpha)
+    love.graphics.printf("Press Enter to Ride", 0, 200, gameWidth, "center")
+    love.graphics.setColor(1, 1, 1, 0.9)
+    love.graphics.setFont(instructionFont)
+    love.graphics.printf("↑ ↓ to surf lanes", 0, 260, gameWidth, "center")
+    love.graphics.printf("W A S D for tricks", 0, 285, gameWidth, "center")
+    love.graphics.printf("S to style up", 0, 320, gameWidth, "center")
 end
+
+
 
 function drawPlayState()
     bg:drawBackground()
