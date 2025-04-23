@@ -45,7 +45,11 @@ function love.load()
     titleFont = love.graphics.newFont(38)
     scoreFont = love.graphics.newFont(24)
     instructionFont = love.graphics.newFont(16)
-    Push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false, resizable = true})
+    Push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {
+        fullscreen = false,
+        resizable = true,
+        canvas = true
+    })    
     -- Initialize game objects
     bg = Background()
     surfer = Surfer()

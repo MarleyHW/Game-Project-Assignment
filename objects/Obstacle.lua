@@ -17,8 +17,9 @@ function Obstacle:init(lanePosition)
     self.obstacleType = math.random(1, #obstacleSprites)
     self.sprite = obstacleSprites[self.obstacleType]
     -- Set dimensions
-    self.width = self.sprite:getWidth()
-    self.height = self.sprite:getHeight()
+    self.width = self.sprite:getWidth() * 0.6
+    self.height = self.sprite:getHeight() * 0.6
+
     
     -- Set vertical position based on lane
     if lanePosition == 1 then

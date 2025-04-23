@@ -21,7 +21,7 @@ surferSprites["trick3"][3] = love.graphics.newImage("assets/sprites/surfer_trick
 local Surfer = Class{}
 function Surfer:init() 
     -- Position
-    self.x = gameWidth * 0.25
+    self.x = gameWidth * 0.2
     self.y = gameHeight * 0.5 
     -- Dimensions
     self.width = surferSprites["idle"][1]:getWidth()
@@ -38,7 +38,7 @@ function Surfer:init()
     self.invincibleTime = 0
     self.invincibleFlash = 0
     -- Movement
-    self.moveSpeed = 200
+    self.moveSpeed = 400
     self.verticalPosition = 2 
     self.targetY = self.y
     -- Tricks
@@ -128,7 +128,7 @@ end
 function Surfer:move(direction)
     if direction == "up" and self.verticalPosition > 1 then
         self.verticalPosition = self.verticalPosition - 1
-        self.targetY = gameHeight/2 - 80 + (self.verticalPosition - 2) * 80
+        self.targetY = gameHeight/2 - 100 + (self.verticalPosition - 2) * 100
     elseif direction == "down" and self.verticalPosition < 3 then
         self.verticalPosition = self.verticalPosition + 1
         self.targetY = gameHeight/2 - 80 + (self.verticalPosition - 2) * 80
