@@ -35,7 +35,6 @@ debugFlag = false
 highScore = 0
 currentScore = 0
 lastScore = 0
-lives = 3
 maxLives = 3
 difficultyMultiplier = 1
 timePlayed = 0
@@ -133,10 +132,13 @@ function love.update(dt)
         if collectedType == "seashell" then
             particles:createCollectEffect(surfer.x, surfer.y)
             sounds["collect"]:play()
+            currentScore = currentScore + 10
+            surfer:showScoreIndicator("+10")
         elseif collectedType == "lifejacket" then
             particles:createLifeJacketEffect(surfer.x, surfer.y)
             sounds["life"]:play()
             lives = math.min(maxLives, lives + 1)
+            surfer:showScoreIndicator("+1")
         end
         -- Check for collisions
         local collectedType = collectibles:checkCollisions(surfer)
