@@ -56,17 +56,19 @@ function Obstacle:update(dt, speedMultiplier)
 end
 
 function Obstacle:draw()
-    -- Draw with bobbing animation
+    local scale = 0.3 
+    local originX = self.sprite:getWidth() / 2
+    local originY = self.sprite:getHeight() / 2
     love.graphics.draw(
         self.sprite, 
-        self.x, 
-        self.y + self.bobHeight, 
+        self.x + originX * scale, 
+        self.y + self.bobHeight + originY * scale,
         self.rotation, 
-        1, 1, 
-        0, 0 
+        scale, scale, 
+        originX, originY
     )
     if debugFlag then
-        love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+        love.graphics.rectangle("line", self.x, self.y, self.width * scale, self.height * scale)
     end
 end
 

@@ -24,8 +24,8 @@ local TrickSystem = require("systems.TrickSystem")
 local SkinUnlocks = require("systems.SkinsUnlock")
 
 -- Global variables
-gameWidth = 640
-gameHeight = 480
+gameWidth = 1024
+gameHeight = 768
 gameState = "start" 
 debugFlag = false
 highScore = 0

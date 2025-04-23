@@ -7,9 +7,9 @@ function Collectible:init(type, lanePosition)
     self.type = type 
     -- Load sprite based on type
     if self.type == "seashell" then
-        self.sprite = love.graphics.newImage("sprites/seashell.png")
+        self.sprite = love.graphics.newImage("assets/sprites/seashell.png")
     else
-        self.sprite = love.graphics.newImage("sprites/lifejacket.png")
+        self.sprite = love.graphics.newImage("assets/sprites/lifejacket.png")
     end
     -- Position and dimensions
     self.x = gameWidth + 50 

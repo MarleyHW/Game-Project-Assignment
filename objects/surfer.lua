@@ -21,8 +21,8 @@ surferSprites["trick3"][3] = love.graphics.newImage("assets/sprites/surfer_trick
 local Surfer = Class{}
 function Surfer:init() 
     -- Position
-    self.x = gameWidth/3 
-    self.y = gameHeight/2 
+    self.x = gameWidth * 0.25
+    self.y = gameHeight * 0.5 
     -- Dimensions
     self.width = surferSprites["idle"][1]:getWidth()
     self.height = surferSprites["idle"][1]:getHeight()
@@ -105,7 +105,14 @@ function Surfer:draw()
         love.graphics.printf(self.scoreText, 0, self.y - 40, gameWidth, "center")
     end
     
-    love.graphics.draw(surferSprites[self.currentAnimation][self.currentFrame], self.x, self.y)
+    local scale = 0.3 
+    love.graphics.draw(
+    surferSprites[self.currentAnimation][self.currentFrame],
+    self.x, self.y,
+    0,      
+    scale, scale 
+)
+
     love.graphics.setColor(1, 1, 1, 1) 
     if debugFlag then
         love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
