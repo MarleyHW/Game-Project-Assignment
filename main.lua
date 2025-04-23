@@ -195,7 +195,7 @@ function drawStartState()
     -- Controls
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(instructionFont)
-    love.graphics.printf("↑ ↓ to surf lanes", 0, 220, gameWidth, "center")
+    love.graphics.printf("Up or down to surf lanes", 0, 220, gameWidth, "center")
     love.graphics.printf("W A S D for tricks", 0, 240, gameWidth, "center")
     love.graphics.printf("S to change surfer style", 0, 270, gameWidth, "center")
 end
