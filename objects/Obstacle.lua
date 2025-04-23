@@ -56,7 +56,7 @@ function Obstacle:update(dt, speedMultiplier)
 end
 
 function Obstacle:draw()
-    local scale = 0.3 
+    local scale = 0.1 
     local originX = self.sprite:getWidth() / 2
     local originY = self.sprite:getHeight() / 2
     love.graphics.draw(

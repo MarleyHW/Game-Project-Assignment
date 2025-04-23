@@ -46,6 +46,8 @@ function Surfer:init()
     self.currentTrick = nil
     self.trickTimer = 0
     self.trickDuration = 0
+    self.sprites = surferSprites
+
 end 
 function Surfer:update(dt)
     -- Update animation
@@ -105,13 +107,17 @@ function Surfer:draw()
         love.graphics.printf(self.scoreText, 0, self.y - 40, gameWidth, "center")
     end
     
-    local scale = 0.3 
+    local scale = 0.15 
     love.graphics.draw(
-    surferSprites[self.currentAnimation][self.currentFrame],
-    self.x, self.y,
-    0,      
-    scale, scale 
+    self.sprites[self.currentAnimation][self.currentFrame],
+    self.x,
+    self.y,
+    0,
+    0.4, 0.4,
+    self.width / 2,
+    self.height / 2
 )
+
 
     love.graphics.setColor(1, 1, 1, 1) 
     if debugFlag then
@@ -138,7 +144,7 @@ function Surfer:startTrick(trickType)
     if not self.performingTrick then
         self.performingTrick = true
         self.currentTrick = trickType
-        -- Set animation based on trick difficulty
+        -- Set animation based on difficulty
         if trickType == "easy" then
             self.currentAnimation = "trick1"
             self.trickDuration = 1.0
