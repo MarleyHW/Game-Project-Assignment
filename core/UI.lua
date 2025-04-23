@@ -15,7 +15,7 @@ function UI:init()
     self.displayScore = 0
     self.targetScore = 0
 
-    -- UI positions
+    -- Score and lives position
     self.scoreX = 10
     self.scoreY = 10
     self.livesX = gameWidth - 120
@@ -62,16 +62,14 @@ function UI:drawScore(score)
 
     -- Draw background glow for readability
     love.graphics.setColor(0, 0, 0, 0.5)
-    love.graphics.printf("SCORE: " .. math.floor(self.displayScore), 
-        self.scoreX + 2, self.scoreY + 2, 200, "left")
+    love.graphics.printf("SCORE: " .. math.floor(self.displayScore), self.scoreX + 2, self.scoreY + 2, 200, "left")
         
     -- Draw score with scaling effect if pulsing
     if self.scorePulse then
         love.graphics.setColor(1, 1, 0, 1)
         love.graphics.push()
         love.graphics.scale(self.scoreScale, self.scoreScale)
-        love.graphics.printf("SCORE: " .. math.floor(self.displayScore), 
-            self.scoreX / self.scoreScale, self.scoreY / self.scoreScale, 200 / self.scoreScale, "left")
+        love.graphics.printf("SCORE: " .. math.floor(self.displayScore), self.scoreX / self.scoreScale, self.scoreY / self.scoreScale, 200 / self.scoreScale, "left")
         love.graphics.pop()
     else
         love.graphics.setColor(1, 1, 0, 1)
