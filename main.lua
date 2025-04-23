@@ -233,23 +233,39 @@ function drawPlayUI()
 end
 
 function drawGameOverState()
-    -- Title
+    -- Background
+    local bgScaleX = gameWidth / beachTitleBG:getWidth()
+    local bgScaleY = gameHeight / beachTitleBG:getHeight()
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.printf("Wipeout!", titleFont, 0, 100, gameWidth, "center")
+    love.graphics.draw(beachTitleBG, 0, 0, 0, bgScaleX, bgScaleY)
+
+    -- Title
+    love.graphics.setFont(titleFont)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.printf("Wipeout!", 0, 60, gameWidth, "center")
 
     -- Score Info
-    love.graphics.printf("Score: " .. math.floor(lastScore), scoreFont, 0, 160, gameWidth, "center")
-    love.graphics.printf("High Score: " .. math.floor(highScore), scoreFont, 0, 200, gameWidth, "center")
+    love.graphics.setFont(scoreFont)
+    love.graphics.setColor(0, 0.8, 1, 1)
+    love.graphics.printf("Score: " .. math.floor(lastScore), 0, 180, gameWidth, "center")
+    love.graphics.printf("High Score: " .. math.floor(highScore), 0, 210, gameWidth, "center")
 
+    -- Skin Unlock (if applicable)
     if skins:hasNewUnlock() then
-        love.graphics.printf("New Skin Unlocked!", scoreFont, 0, 240, gameWidth, "center")
+        love.graphics.printf("New Skin Unlocked!", 0, 400, gameWidth, "center")
     end
 
+    -- Flashing Play Again Prompt
+    local alpha = 0.5 + 0.5 * math.sin(love.timer.getTime() * 4)
+    love.graphics.setColor(0, 0.8, 1, alpha)
+    love.graphics.setFont(scoreFont)
+    love.graphics.printf("Press Enter to Play Again", 0, 250, gameWidth, "center")
+
     -- Instructions
-    love.graphics.setColor(1, 1, 1, 0.8)
-    love.graphics.printf("Press Enter to Play Again", instructionFont, 0, 280, gameWidth, "center")
-    love.graphics.printf("Press S to view skins", instructionFont, 0, 310, gameWidth, "center")
-    love.graphics.printf("Press Esc to exit", instructionFont, 0, 340, gameWidth, "center")
+    love.graphics.setColor(0, 0.8, 1, 1)
+    love.graphics.setFont(instructionFont)
+    love.graphics.printf("Press S to view skins", 0, 340, gameWidth, "center")
+    love.graphics.printf("Press Esc to exit", 0, 370, gameWidth, "center")
 end
 
 

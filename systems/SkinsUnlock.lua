@@ -8,13 +8,13 @@ function SkinUnlocks:init()
             name = "Default",
             unlocked = true,
             scoreRequirement = 0,
-            preview = love.graphics.newImage("assets/sprites/surfer_idle1.png")
+            preview = love.graphics.newImage("assets/sprites/surfer1.png")
         },
         {
             name = "Pro Surfer",
             unlocked = false,
             scoreRequirement = 100,
-            preview = love.graphics.newImage("assets/sprites/surfer_idle2.png")
+            preview = love.graphics.newImage("assets/sprites/surfer2.png")
         },
         {
             name = "Champion",

@@ -7,7 +7,6 @@ function ObstacleCourse:init()
     self.spawnTimer = 0
     self.spawnInterval = 2.0 
     self.minSpawnInterval = 0.7 
-    --table.insert(self.obstacles, Obstacle(math.random(1, 3)))
 end
 
 function ObstacleCourse:update(dt, difficultyMultiplier)

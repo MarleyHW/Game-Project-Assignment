@@ -1,7 +1,7 @@
 local Class = require("libs.hump.class")
 local surferSprites = {
-    love.graphics.newImage("assets/sprites/surfer_idle1.png"),
-    love.graphics.newImage("assets/sprites/surfer_idle2.png"),
+    love.graphics.newImage("assets/sprites/surfer1.png"),
+    love.graphics.newImage("assets/sprites/surfer2.png"),
     love.graphics.newImage("assets/sprites/surfer_idle3.png")
 }
 -- Define the Surfer class
@@ -71,9 +71,9 @@ function Surfer:update(dt)
     if self.y < gameHeight / 2 then
         self.y = gameHeight / 2
         self.targetY =  gameHeight / 2
-    elseif self.y > gameHeight - 50 then
-        self.y = gameHeight - 50
-        self.targetY = gameHeight - 50
+    elseif self.y > gameHeight - 70 then
+        self.y = gameHeight - 70
+        self.targetY = gameHeight - 70
     end
     
     if self.scoreTimer and self.scoreTimer > 0 then
@@ -94,15 +94,14 @@ function Surfer:draw()
 
     -- Show score popup
     if self.scoreText then
-        love.graphics.setColor(1, 1, 0, 1)
         love.graphics.printf(self.scoreText, 0, self.y - 40, gameWidth, "center")
     end
 
     -- Draw the surfer sprite
-    local drawScale = 0.10
+    local drawScale = 0.20
     love.graphics.draw(
         self.sprite,
-        self.x,
+        self.x + 50,
         self.y,
         0,
         drawScale, drawScale,

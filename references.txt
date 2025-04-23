@@ -1,2 +1,4 @@
 bgWaves.png: Image by rawpixel.com, https://www.rawpixel.com/image/12903391/png-border-sea
 driftwood.png: Image by rawpixel.com, https://www.rawpixel.com/image/15420701/dry-wood-driftwood-smoke-pipe
+surfer1.png: Image by rawpixel.com, https://www.rawpixel.com/image/10106698/png-person-cartoon
+surfer2.png: Image by rawpixel.com, https://www.rawpixel.com/image/10106708/png-person-cartoon
