@@ -1,32 +1,25 @@
 local Class = require("libs.hump.class")
-local surferSprites = {}
-surferSprites["idle"] = {}
-surferSprites["idle"][1] = love.graphics.newImage("assets/sprites/surfer_idle1.png")
-surferSprites["idle"][2] = love.graphics.newImage("assets/sprites/surfer_idle2.png")
-surferSprites["idle"][3] = love.graphics.newImage("assets/sprites/surfer_idle3.png")
-surferSprites["trick1"] = {}
-surferSprites["trick1"][1] = love.graphics.newImage("assets/sprites/surfer_trick1_1.png")
-surferSprites["trick1"][2] = love.graphics.newImage("assets/sprites/surfer_trick1_2.png")
-surferSprites["trick1"][3] = love.graphics.newImage("assets/sprites/surfer_trick1_3.png")
-surferSprites["trick2"] = {}
-surferSprites["trick2"][1] = love.graphics.newImage("assets/sprites/surfer_trick2_1.png")
-surferSprites["trick2"][2] = love.graphics.newImage("assets/sprites/surfer_trick2_2.png")
-surferSprites["trick2"][3] = love.graphics.newImage("assets/sprites/surfer_trick2_3.png")
-surferSprites["trick3"] = {}
-surferSprites["trick3"][1] = love.graphics.newImage("assets/sprites/surfer_trick3_1.png")
-surferSprites["trick3"][2] = love.graphics.newImage("assets/sprites/surfer_trick3_2.png")
-surferSprites["trick3"][3] = love.graphics.newImage("assets/sprites/surfer_trick3_3.png")
-
+local surferSprites = {
+    love.graphics.newImage("assets/sprites/surfer_idle1.png"),
+    love.graphics.newImage("assets/sprites/surfer_idle2.png"),
+    love.graphics.newImage("assets/sprites/surfer_idle3.png")
+}
 -- Define the Surfer class
 local Surfer = Class{}
 function Surfer:init() 
     -- Position
     self.x = gameWidth * 0.2
     self.y = gameHeight * 0.5 
+    -- Skins
+    self.currentSkin = currentSkin or 1
+    self.sprite = surferSprites[self.currentSkin]
+    self.width = self.sprite:getWidth()
+    self.height = self.sprite:getHeight()
     -- Dimensions
-    self.width = surferSprites["idle"][1]:getWidth() * 0.02
-    self.height = surferSprites["idle"][1]:getHeight() * 0.02
-    self.scale = 0.2
+    self.sprite = surferSprites[self.currentSkin]
+    self.width = self.sprite:getWidth()
+    self.height = self.sprite:getHeight()
+    self.scale = 0.1
     -- Animation state
     self.currentAnimation = "idle"
     self.currentFrame = 1
@@ -48,15 +41,14 @@ function Surfer:init()
     self.trickTimer = 0
     self.trickDuration = 0
     self.sprites = surferSprites
-
 end 
 function Surfer:update(dt)
     -- Update animation
-    self.animationTime = self.animationTime + dt
-    if self.animationTime >= self.animationSpeed then
-        self.currentFrame = (self.currentFrame % #surferSprites[self.currentAnimation]) + 1
-        self.animationTime = 0
-    end
+   -- self.animationTime = self.animationTime + dt
+   -- if self.animationTime >= self.animationSpeed then
+      --  self.currentFrame = (self.currentFrame % #surferSprites[self.currentAnimation]) + 1
+      --  self.animationTime = 0
+  --  end
     
     -- Smooth vertical movement
     if math.abs(self.y - self.targetY) > 2 then
@@ -97,20 +89,23 @@ function Surfer:update(dt)
     
 end
 function Surfer:draw()
-    -- Draw with flashing effect when invincible
+    -- Flash effect when invincible
     if self.invincible and math.floor(self.invincibleFlash * 10) % 2 == 0 then
         love.graphics.setColor(1, 1, 1, 0.5)
     else
         love.graphics.setColor(1, 1, 1, 1)
     end
+
+    -- Show score popup
     if self.scoreText then
         love.graphics.setColor(1, 1, 0, 1)
         love.graphics.printf(self.scoreText, 0, self.y - 40, gameWidth, "center")
     end
-    
-    local drawScale = 0.05 
+
+    -- Draw the surfer sprite
+    local drawScale = 0.10
     love.graphics.draw(
-        self.sprites[self.currentAnimation][self.currentFrame],
+        self.sprite,
         self.x,
         self.y,
         0,
@@ -119,14 +114,15 @@ function Surfer:draw()
         self.height / 2
     )
 
-
-
     love.graphics.setColor(1, 1, 1, 1) 
+
+    -- Debug info
     if debugFlag then
-        love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+        love.graphics.rectangle("line", self.x, self.y, self.width * drawScale, self.height * drawScale)
         love.graphics.print("Pos: " .. self.verticalPosition, self.x, self.y - 20)
     end
 end
+
 function Surfer:move(direction)
     if direction == "up" and self.verticalPosition > 1 then
         self.verticalPosition = self.verticalPosition - 1
@@ -181,5 +177,13 @@ end
 function Surfer:moveDown()
     self:move("down")
 end
+
+function Surfer:changeSkin(skinIndex)
+    self.currentSkin = skinIndex
+    self.sprite = self.sprites[self.currentSkin]
+    self.width = self.sprite:getWidth()
+    self.height = self.sprite:getHeight()
+end
+
 
 return Surfer

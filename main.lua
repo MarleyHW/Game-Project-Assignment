@@ -105,7 +105,8 @@ function love.update(dt)
         difficultyMultiplier = math.min(3, 1 + (timePlayed / 60))
         -- Update game objects
         bg:update(dt)
-        particles:setWakePosition(surfer.x - surfer.width / 2, surfer.y + surfer.height / 3)
+        local drawScale = 0.15
+        particles:setWakePosition(surfer.x - (surfer.width * drawScale) / 2, surfer.y + (surfer.height * drawScale) / 3)
         surfer:update(dt)
         obsCourse:update(dt, difficultyMultiplier)
         particles:update(dt)
@@ -207,6 +208,12 @@ function drawStartState()
     love.graphics.printf("Up or down to surf lanes", 0, 220, gameWidth, "center")
     love.graphics.printf("W A S D for tricks", 0, 240, gameWidth, "center")
     love.graphics.printf("S to change surfer style", 0, 270, gameWidth, "center")
+
+    -- High Score Display
+    love.graphics.setFont(scoreFont)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.printf("High Score: " .. math.floor(highScore), 0, 200, gameWidth, "center")
+
 end
 
 
@@ -274,6 +281,11 @@ function drawSkinsMenu()
     
     love.graphics.printf("Press Enter to select", instructionFont, 0, 380, gameWidth, "center")
     love.graphics.printf("Press B to go back", instructionFont, 0, 410, gameWidth, "center")
+
+    love.graphics.setFont(scoreFont)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.printf("High Score: " .. math.floor(highScore), 0, 100, gameWidth, "center")
+
 end
 
 function resetGame()

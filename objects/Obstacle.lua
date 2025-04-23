@@ -76,8 +76,12 @@ end
 function Obstacle:collision(surfer)
     -- Check for collision with surfer
     if not self.active then return false end
-    local colX = self.x + self.width >= surfer.x and surfer.x + surfer.width >= self.x
-    local colY = self.y + self.height >= surfer.y and surfer.y + surfer.height >= self.y
+    local scale = 0.1
+    local obstacleWidth = self.width * scale
+    local obstacleHeight = self.height * scale
+    local colX = self.x + obstacleWidth >= surfer.x and surfer.x + surfer.width * 0.15 >= self.x
+    local colY = self.y + obstacleHeight >= surfer.y and surfer.y + surfer.height * 0.15 >= self.y
+
     
     return colX and colY
 end
