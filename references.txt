@@ -1,1 +1,2 @@
 bgWaves.png: Image by rawpixel.com, https://www.rawpixel.com/image/12903391/png-border-sea
+driftwood.png: Image by rawpixel.com, https://www.rawpixel.com/image/15420701/dry-wood-driftwood-smoke-pipe

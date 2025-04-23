@@ -4,7 +4,7 @@ local Timer = require("libs.hump.timer")
 local obstacleSprites = {}
 obstacleSprites[1] = love.graphics.newImage("assets/sprites/obstacle_seaweed.png")
 obstacleSprites[2] = love.graphics.newImage("assets/sprites/obstacle_rock.png")
-obstacleSprites[3] = love.graphics.newImage("assets/sprites/obstacle_driftwood.png")
+obstacleSprites[3] = love.graphics.newImage("assets/sprites/driftwood.png")
 local Obstacle = Class{}
 
 function Obstacle:init(lanePosition)

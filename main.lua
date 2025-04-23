@@ -11,13 +11,11 @@ local Utils = require("core.Utils")
 local UI = require("core.UI")
 local ParticleSystem = require("core.ParticleSystem")
 
-
 -- Objects
 local Surfer = require("objects.Surfer")
 local Obstacle = require("objects.Obstacle")
 local ObstacleCourse = require("objects.ObstacleCourse")
 local CollectibleSystem = require("objects.CollectibleSystem")
-
 
 -- Systems
 local TrickSystem = require("systems.TrickSystem")
@@ -25,7 +23,6 @@ local SkinUnlocks = require("systems.SkinsUnlock")
 
 -- TitleScreen
 local beachTitleBG = love.graphics.newImage("assets/bg/beach.png")
-
 
 -- Global variables
 gameWidth = 1024
@@ -72,14 +69,14 @@ function love.load()
     sounds = {}
 
     sounds = {} 
-    sounds['music']       = love.audio.newSource("assets/sounds/beach_music.mp3", "static")
-    sounds['trick']       = love.audio.newSource("assets/sounds/trick.wav", "static")
-    sounds['trick_land']  = love.audio.newSource("assets/sounds/trick_land.wav", "static")
-    sounds['collect']     = love.audio.newSource("assets/sounds/collect.wav", "static")
-    sounds['life']        = love.audio.newSource("assets/sounds/life.wav", "static")
-    sounds['splash']      = love.audio.newSource("assets/sounds/splash.wav", "static")
-    sounds['collision']   = love.audio.newSource("assets/sounds/impact.wav", "static")
-    sounds['gameover']    = love.audio.newSource("assets/sounds/gameover.wav", "static")
+    sounds['music'] = love.audio.newSource("assets/sounds/beach_music.mp3", "static")
+    sounds['trick'] = love.audio.newSource("assets/sounds/trick.wav", "static")
+    sounds['trick_land'] = love.audio.newSource("assets/sounds/trick_land.wav", "static")
+    sounds['collect'] = love.audio.newSource("assets/sounds/collect.wav", "static")
+    sounds['life'] = love.audio.newSource("assets/sounds/life.wav", "static")
+    sounds['splash'] = love.audio.newSource("assets/sounds/splash.wav", "static")
+    sounds['collision'] = love.audio.newSource("assets/sounds/impact.wav", "static")
+    sounds['gameover'] = love.audio.newSource("assets/sounds/gameover.wav", "static")
     -- Start background music
     sounds['music']:setLooping(true)
     sounds['music']:play()
@@ -111,7 +108,7 @@ function love.update(dt)
         obsCourse:update(dt, difficultyMultiplier)
         particles:update(dt)
         tricks:update(dt)
-        collectibles:update(dt, difficultyMultiplier)
+        --collectibles:update(dt, difficultyMultiplier)
         -- Check for collectibles
         local collectedType = collectibles:checkCollisions(surfer)
         if collectedType == "seashell" then
@@ -209,15 +206,13 @@ function drawStartState()
     love.graphics.printf("Hold W A S D for Tricks", 0, 290, gameWidth, "center")
 end
 
-
-
 function drawPlayState()
     bg:drawBackground()
     bg:drawForeground()
     obsCourse:draw()
     particles:draw()
     surfer:draw()
-    collectibles:draw()
+    --collectibles:draw()
     drawPlayUI()
     if debugFlag then
         love.graphics.print("FPS: "..love.timer.getFPS(), 10, gameHeight-20)

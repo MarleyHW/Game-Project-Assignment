@@ -9,7 +9,7 @@ local Surfer = Class{}
 function Surfer:init() 
     -- Position
     self.x = gameWidth * 0.2
-    self.y = gameHeight * 0.5 
+    self.y = gameHeight * 0.8 
     -- Skins
     self.currentSkin = currentSkin or 1
     self.sprite = surferSprites[self.currentSkin]
@@ -33,7 +33,7 @@ function Surfer:init()
     self.invincibleFlash = 0
     -- Movement
     self.moveSpeed = 400
-    self.verticalPosition = 2 
+    self.moveDistance = 100  -- How far to move up/down with each key press
     self.targetY = self.y
     -- Tricks
     self.performingTrick = false
@@ -43,13 +43,6 @@ function Surfer:init()
     self.sprites = surferSprites
 end 
 function Surfer:update(dt)
-    -- Update animation
-   -- self.animationTime = self.animationTime + dt
-   -- if self.animationTime >= self.animationSpeed then
-      --  self.currentFrame = (self.currentFrame % #surferSprites[self.currentAnimation]) + 1
-      --  self.animationTime = 0
-  --  end
-    
     -- Smooth vertical movement
     if math.abs(self.y - self.targetY) > 2 then
         local direction = (self.targetY > self.y) and 1 or -1
@@ -75,19 +68,22 @@ function Surfer:update(dt)
         end
     end
     -- Boundary check
-    if self.y < 100 then
-        self.y = 100
-    elseif self.y > gameHeight - 150 then
-        self.y = gameHeight - 150
+    if self.y < gameHeight / 2 then
+        self.y = gameHeight / 2
+        self.targetY =  gameHeight / 2
+    elseif self.y > gameHeight - 50 then
+        self.y = gameHeight - 50
+        self.targetY = gameHeight - 50
     end
+    
     if self.scoreTimer and self.scoreTimer > 0 then
         self.scoreTimer = self.scoreTimer - dt
         if self.scoreTimer <= 0 then
             self.scoreText = nil
         end
     end
-    
 end
+
 function Surfer:draw()
     -- Flash effect when invincible
     if self.invincible and math.floor(self.invincibleFlash * 10) % 2 == 0 then
@@ -119,19 +115,20 @@ function Surfer:draw()
     -- Debug info
     if debugFlag then
         love.graphics.rectangle("line", self.x, self.y, self.width * drawScale, self.height * drawScale)
-        love.graphics.print("Pos: " .. self.verticalPosition, self.x, self.y - 20)
+        love.graphics.print("Y: " .. math.floor(self.y), self.x, self.y - 20)
     end
 end
 
-function Surfer:move(direction)
-    if direction == "up" and self.verticalPosition > 1 then
-        self.verticalPosition = self.verticalPosition - 1
-        self.targetY = gameHeight/2 - 100 + (self.verticalPosition - 2) * 100
-    elseif direction == "down" and self.verticalPosition < 3 then
-        self.verticalPosition = self.verticalPosition + 1
-        self.targetY = gameHeight/2 - 80 + (self.verticalPosition - 2) * 80
-    end
+function Surfer:moveUp()
+    -- Move up by moveDistance, but don't exceed new upper boundary
+    self.targetY = math.max(5, self.y - self.moveDistance)
 end
+
+function Surfer:moveDown()
+    -- Move down by moveDistance, but don't exceed new lower boundary
+    self.targetY = math.min(gameHeight - 5, self.y + self.moveDistance)
+end
+
 function Surfer:showScoreIndicator(text)
     -- To show a temporary score pop up 
     self.scoreText = text
@@ -163,19 +160,12 @@ function Surfer:startTrick(trickType)
     
     return false
 end
+
 function Surfer:endTrick()
     self.performingTrick = false
     self.currentAnimation = "idle"
     self.currentFrame = 1
     self.animationTime = 0
-end
-
-function Surfer:moveUp()
-    self:move("up")
-end
-
-function Surfer:moveDown()
-    self:move("down")
 end
 
 function Surfer:changeSkin(skinIndex)
@@ -184,6 +174,5 @@ function Surfer:changeSkin(skinIndex)
     self.width = self.sprite:getWidth()
     self.height = self.sprite:getHeight()
 end
-
 
 return Surfer
