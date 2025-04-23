@@ -1,6 +1,7 @@
 -- Libraries
 local Class = require("libs.hump.class")
 local Timer = require("libs.hump.timer")
+local tween = require("libs.tween")
 
 -- Engine
 local Push = require("engine.push")
@@ -37,6 +38,12 @@ timePlayed = 0
 currentSkin = 1
 scoreTween = nil
 speedTween = nil
+-- Tween values for game over text
+gameOverY = -200
+gameOverTween = nil
+-- Tween values for starting title text
+titleY = 200
+titleTween = nil
 
 function love.load()
     love.window.setTitle("Tide Rider")
@@ -71,6 +78,8 @@ function love.load()
     sounds['music']:play()
     -- Initialize tweens
     speedTween = Utils.newTween(difficultyMultiplier, 1, 3, 60)
+    titleY = gameHeight
+    titleTween = tween.new(1.5, {y = titleY}, {y = 60}, 'inCubic')
 end
 function love.resize(w, h)
     Push:resize(w, h)
@@ -84,6 +93,15 @@ function love.update(dt)
     if scoreTween then
         scoreTween:update(dt)
     end
+    -- Tweening for game over text
+    if gameOverTween and gameState == "over" then
+        gameOverTween:update(dt)
+    end
+    -- Tweening for start of game title
+    if titleTween and gameState == "start" then
+        titleTween:update(dt)
+    end
+
     if gameState == "play" then
         -- Update timers
         timePlayed = timePlayed + dt
@@ -127,6 +145,9 @@ function love.update(dt)
                 highScore = math.max(highScore, currentScore)
                 lastScore = currentScore
                 skins:checkUnlocks(currentScore)
+
+                gameOverY = -200  -- Start offscreen
+                gameOverTween = tween.new(1.2, {y = gameOverY}, {y = 60}, 'outBounce')
             end
         end
 
@@ -161,22 +182,31 @@ function drawStartState()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(beachTitleBG, 0, 0, 0, bgScaleX, bgScaleY)
 
-    -- Start screen
+    -- Update title position from tween
+    if titleTween then
+        titleTween:update(love.timer.getDelta())
+        titleY = titleTween.subject.y
+    end
+
+    -- Start screen with tweened Y position
     love.graphics.setFont(titleFont)
     love.graphics.setColor(0, 0.5, 1)
-    love.graphics.printf("TIDE RIDER", 0, 60, gameWidth, "center")
+    love.graphics.printf("TIDE RIDER", 0, titleY, gameWidth, "center")
 
-    -- Game start text flashing to make it more noticeable
-    local alpha = 0.5 + 0.5 * math.sin(love.timer.getTime() * 4)
-    love.graphics.setColor(0, 0.8, 1, alpha)
-    love.graphics.setFont(scoreFont)
-    love.graphics.printf("Press Enter to Ride", 0, 180, gameWidth, "center")
+    -- Only show other UI elements after the animation has progressed
+    if titleY > 0 then
+        -- Game start text flashing to make it more noticeable
+        local alpha = 0.5 + 0.5 * math.sin(love.timer.getTime() * 4)
+        love.graphics.setColor(0, 0.8, 1, alpha)
+        love.graphics.setFont(scoreFont)
+        love.graphics.printf("Press Enter to Ride", 0, titleY + 120, gameWidth, "center")
 
-    -- List of controls
-    love.graphics.setColor(0, 0.8, 1, 1)
-    love.graphics.setFont(instructionFont)
-    love.graphics.printf("Up or Down Arrows to Surf", 0, 260, gameWidth, "center")
-    love.graphics.printf("Hold W A S D for Tricks", 0, 290, gameWidth, "center")
+        -- List of controls
+        love.graphics.setColor(0, 0.8, 1, 1)
+        love.graphics.setFont(instructionFont)
+        love.graphics.printf("Up or Down Arrows to Surf", 0, titleY + 200, gameWidth, "center")
+        love.graphics.printf("Hold W A S D for Tricks", 0, titleY + 230, gameWidth, "center")
+    end
 end
 
 function drawPlayState()
@@ -209,10 +239,15 @@ function drawGameOverState()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(beachTitleBG, 0, 0, 0, bgScaleX, bgScaleY)
 
-    -- Title
+    if gameOverTween then
+        gameOverTween:update(love.timer.getDelta())
+        gameOverY = gameOverTween.subject.y
+    end
+
+    -- Title with tweened Y position
     love.graphics.setFont(titleFont)
     love.graphics.setColor(0, 0, 0)
-    love.graphics.printf("Wipeout!", 0, 60, gameWidth, "center")
+    love.graphics.printf("Wipeout!", 0, gameOverY, gameWidth, "center")
 
     -- Score info
     love.graphics.setFont(scoreFont)
@@ -271,6 +306,14 @@ function resetGame()
     difficultyMultiplier = 1
     timePlayed = 0
     collectibles = CollectibleSystem()
+
+    -- Resetting tween for game over screen
+    gameOverTween = nil
+    if gameState == "over" then
+        titleY = -200
+        titleTween = tween.new(1.5, {y = titleY}, {y = 60}, 'outBounce')
+    end
+    
     gameState = "play"
 end
 

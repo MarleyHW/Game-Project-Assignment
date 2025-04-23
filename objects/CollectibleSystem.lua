@@ -97,8 +97,8 @@ local CollectibleSystem = Class{}
 function CollectibleSystem:init()
     self.collectibles = {}
     self.spawnTimer = 0
-    -- Time between collectible spawns (10 seconds)
-    self.spawnInterval = 10.0
+    -- Time between collectible spawns (3 seconds)
+    self.spawnInterval = 3.0
     -- Probability of spawning a lifejacket vs seashell (20% chance)
     self.lifejacketProbability = 0.2
 end
