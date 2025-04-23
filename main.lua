@@ -45,9 +45,9 @@ function love.load()
     love.window.setTitle("Tide Rider")
     windowWidth, windowHeight = love.graphics.getDimensions()
     math.randomseed(os.time())
-    titleFont = love.graphics.newFont(38)
-    scoreFont = love.graphics.newFont(24)
-    instructionFont = love.graphics.newFont(16)
+    titleFont = love.graphics.newFont("fonts/HanaleiFill-Regular.ttf",90)
+    scoreFont = love.graphics.newFont(34)
+    instructionFont = love.graphics.newFont(26)
     Push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {
         fullscreen = false,
         resizable = true,
@@ -193,38 +193,30 @@ function drawStartState()
 
     -- Arcade Title
     love.graphics.setFont(titleFont)
-    love.graphics.setColor(1, 1, 0.2, 1)
+    love.graphics.setColor(0, 0.5, 1)
     love.graphics.printf("TIDE RIDER", 0, 60, gameWidth, "center")
 
-    -- Flashing Enter Text
+    -- Flashing Start Game Text
     local alpha = 0.5 + 0.5 * math.sin(love.timer.getTime() * 4)
-    love.graphics.setColor(1, 1, 1, alpha)
+    love.graphics.setColor(0, 0.8, 1, alpha)
     love.graphics.setFont(scoreFont)
-    love.graphics.printf("Press Enter to Ride", 0, 160, gameWidth, "center")
+    love.graphics.printf("Press Enter to Ride", 0, 180, gameWidth, "center")
 
     -- Controls
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(0, 0.8, 1, 1)
     love.graphics.setFont(instructionFont)
-    love.graphics.printf("Up or down to surf lanes", 0, 220, gameWidth, "center")
-    love.graphics.printf("W A S D for tricks", 0, 240, gameWidth, "center")
-    love.graphics.printf("S to change surfer style", 0, 270, gameWidth, "center")
-
-    -- High Score Display
-    love.graphics.setFont(scoreFont)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.printf("High Score: " .. math.floor(highScore), 0, 200, gameWidth, "center")
-
+    love.graphics.printf("Up or Down Arrows to Surf", 0, 260, gameWidth, "center")
+    love.graphics.printf("Hold W A S D for Tricks", 0, 290, gameWidth, "center")
 end
 
 
 
 function drawPlayState()
     bg:drawBackground()
-    bg:drawWave()
+    bg:drawForeground()
     obsCourse:draw()
     particles:draw()
     surfer:draw()
-    bg:drawForeground()
     collectibles:draw()
     drawPlayUI()
     if debugFlag then
