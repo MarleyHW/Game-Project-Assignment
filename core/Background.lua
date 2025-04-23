@@ -48,8 +48,8 @@ function Background:drawBackground()
 end
 
 function Background:drawWave()
-    local waveScale = 0.3  
-    local foamScale = 0.3
+    local waveScale = 0.1  
+    local foamScale = 0.1
     love.graphics.draw(bgWave, -self.wavePos, 250 + self.waveHeight, 0, waveScale, waveScale)
     love.graphics.draw(bgWave, self.bgWidth - self.wavePos, 250 + self.waveHeight, 0, waveScale, waveScale)
     love.graphics.draw(bgFoam, -self.foamPos, 240 + self.waveHeight, 0, foamScale, foamScale)

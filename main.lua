@@ -101,6 +101,7 @@ function love.update(dt)
         difficultyMultiplier = math.min(3, 1 + (timePlayed / 60))
         -- Update game objects
         bg:update(dt)
+        particles:setWakePosition(surfer.x - surfer.width / 2, surfer.y + surfer.height / 3)
         surfer:update(dt)
         obsCourse:update(dt, difficultyMultiplier)
         particles:update(dt)

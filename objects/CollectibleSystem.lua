@@ -13,8 +13,9 @@ function Collectible:init(type, lanePosition)
     end
     -- Position and dimensions
     self.x = gameWidth + 50 
-    self.width = self.sprite:getWidth()
-    self.height = self.sprite:getHeight()
+    local baseScale = 0.3
+    self.width = self.sprite:getWidth() * baseScale
+    self.height = self.sprite:getHeight() * baseScale
     -- Set vertical position based on lane
     if lanePosition == 1 then 
         self.y = gameHeight/2 - 80

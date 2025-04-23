@@ -24,8 +24,9 @@ function Surfer:init()
     self.x = gameWidth * 0.2
     self.y = gameHeight * 0.5 
     -- Dimensions
-    self.width = surferSprites["idle"][1]:getWidth()
-    self.height = surferSprites["idle"][1]:getHeight()
+    self.width = surferSprites["idle"][1]:getWidth() * 0.02
+    self.height = surferSprites["idle"][1]:getHeight() * 0.02
+    self.scale = 0.2
     -- Animation state
     self.currentAnimation = "idle"
     self.currentFrame = 1
@@ -107,16 +108,17 @@ function Surfer:draw()
         love.graphics.printf(self.scoreText, 0, self.y - 40, gameWidth, "center")
     end
     
-    local scale = 0.15 
+    local drawScale = 0.05 
     love.graphics.draw(
-    self.sprites[self.currentAnimation][self.currentFrame],
-    self.x,
-    self.y,
-    0,
-    0.4, 0.4,
-    self.width / 2,
-    self.height / 2
-)
+        self.sprites[self.currentAnimation][self.currentFrame],
+        self.x,
+        self.y,
+        0,
+        drawScale, drawScale,
+        self.width / 2,
+        self.height / 2
+    )
+
 
 
     love.graphics.setColor(1, 1, 1, 1) 
