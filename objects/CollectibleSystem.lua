@@ -59,7 +59,7 @@ end
 function Collectible:draw()
     -- Draw with animation
     love.graphics.setColor(1, 1, 1, self.alpha)
-    local baseScale = 0.3 
+    local baseScale = 0.1 
     love.graphics.draw(
         self.sprite, 
         self.x + (self.width * baseScale) / 2, 
