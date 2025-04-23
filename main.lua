@@ -61,23 +61,7 @@ function love.load()
     skins = SkinUnlocks()
     tricks = TrickSystem(surfer)
     collectibles = CollectibleSystem()
-    collectibles = {}
 
-    -- Spawn a seashell at (400, 300)
-    table.insert(collectibles, {
-        x = 400,
-        y = 300,
-        image = seashellImage,
-        type = "seashell"
-    })
-
-    -- Spawn a lifejacket at (600, 280)
-    table.insert(collectibles, {
-        x = 600,
-        y = 280,
-        image = lifejacketImage,
-        type = "lifejacket"
-    })
 
     -- Debug initial positions
     print(string.format("Surfer initial position: x=%.2f, y=%.2f, w=%.2f, h=%.2f", surfer.x, surfer.y, surfer.width, surfer.height))
@@ -139,20 +123,6 @@ function love.update(dt)
             sounds["life"]:play()
             lives = math.min(maxLives, lives + 1)
             surfer:showScoreIndicator("+1")
-        end
-        -- Check for collisions
-        local collectedType = collectibles:checkCollisions(surfer)
-        if collectedType == "seashell" then
-            particles:createCollectEffect(surfer.x, surfer.y)
-            sounds["collect"]:play()
-            currentScore = currentScore + 10
-            surfer:showScoreIndicator("+10")
-        elseif collectedType == "lifejacket" then
-            particles:createLifeJacketEffect(surfer.x, surfer.y)
-            sounds["life"]:play()
-            if lives < maxLives then
-                lives = lives + 1
-            end
         end
         -- Handle obstacle collision with invincibility
         if obsCourse:collision(surfer) and not surfer.invincible then
