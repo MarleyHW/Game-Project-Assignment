@@ -17,6 +17,7 @@ local Surfer = require("objects.Surfer")
 local Obstacle = require("objects.Obstacle")
 local ObstacleCourse = require("objects.ObstacleCourse")
 local CollectibleSystem = require("objects.CollectibleSystem")
+local Wave = require("objects.wave")
 
 -- Systems
 local SkinUnlocks = require("systems.SkinsUnlock")
@@ -66,6 +67,15 @@ function love.load()
     skins = SkinUnlocks()
     collectibles = CollectibleSystem()
 
+    -- Create waves positioned at the bottom of the screen with differing speeds
+    waves = {}
+    table.insert(waves, Wave(-100, gameHeight/2 + 70, 0.28))
+    table.insert(waves, Wave(200, gameHeight/2 + 70, 0.25))
+    table.insert(waves, Wave(500, gameHeight/2 + 70, 0.22))
+    table.insert(waves, Wave(800, gameHeight/2 + 70, 0.26))
+    table.insert(waves, Wave(1100, gameHeight/2 + 70, 0.24))
+
+    -- Sound effects for the game
     sounds = {} 
     sounds['music'] = love.audio.newSource("assets/sounds/west-coast-surf-instrumental-208062.mp3", "static")
     sounds['collect'] = love.audio.newSource("assets/sounds/collect-5930.mp3", "static")
@@ -100,6 +110,13 @@ function love.update(dt)
     -- Tweening for start of game title
     if titleTween and gameState == "start" then
         titleTween:update(dt)
+    end
+
+    -- Checking game state for displaying animated waves
+    if gameState == "start" or gameState == "over" then
+        for _, wave in ipairs(waves) do
+            wave:update(dt)
+        end
     end
 
     if gameState == "play" then
@@ -182,6 +199,11 @@ function drawStartState()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(beachTitleBG, 0, 0, 0, bgScaleX, bgScaleY)
 
+    -- Draw waves
+    for _, wave in ipairs(waves) do
+        wave:draw()
+    end
+
     -- Update title position from tween
     if titleTween then
         titleTween:update(love.timer.getDelta())
@@ -239,6 +261,12 @@ function drawGameOverState()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(beachTitleBG, 0, 0, 0, bgScaleX, bgScaleY)
 
+    -- Draw animated waves
+    for _, wave in ipairs(waves) do
+        wave:draw()
+    end
+
+    -- Tween for wipeout text
     if gameOverTween then
         gameOverTween:update(love.timer.getDelta())
         gameOverY = gameOverTween.subject.y
