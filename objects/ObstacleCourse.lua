@@ -1,5 +1,6 @@
 local Class = require("libs.hump.class")
 local Obstacle = require("objects.Obstacle")
+local Orca = require("objects.orca")
 local ObstacleCourse = Class{}
 
 function ObstacleCourse:init()
@@ -7,6 +8,7 @@ function ObstacleCourse:init()
     self.spawnTimer = 0
     self.spawnInterval = 2.0 
     self.minSpawnInterval = 0.7 
+    self.orcaSpawnChance = 0.2 -- chance of an orca spawning
 end
 
 function ObstacleCourse:update(dt, difficultyMultiplier)
@@ -33,17 +35,34 @@ function ObstacleCourse:update(dt, difficultyMultiplier)
 
     if self.spawnTimer >= currentInterval then
         self.spawnTimer = 0
-        -- Create new obstacle in random lane
-        local newObstacle = Obstacle(math.random(1, 3))
+        
+        -- Determine if we should spawn an orca or regular obstacle
+        local lane = math.random(1, 3)
+        local newObstacle
+        
+        -- Orca has a chance to spawn that increases with difficulty
+        local orcaRoll = math.random()
+        local orcaChance = self.orcaSpawnChance * difficultyMultiplier
+        
+        if orcaRoll < orcaChance then
+            -- Spawn an orca
+            newObstacle = Orca(lane)
+        else
+            -- Spawn regular obstacle
+            newObstacle = Obstacle(lane)
+        end
+        
         table.insert(self.obstacles, newObstacle)
         
         -- Sometimes spawn multiple obstacles
         if difficultyMultiplier > 1.3 and math.random() < 0.3 then
             local secondLane = math.random(1, 3)
             -- Make sure it's not in the same lane
-            while secondLane == newObstacle.lanePosition do
+            while secondLane == lane do
                 secondLane = math.random(1, 3)
             end
+            
+            -- Don't spawn multiple orcas together
             table.insert(self.obstacles, Obstacle(secondLane))
         end
     end
