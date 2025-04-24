@@ -8,7 +8,7 @@ function ObstacleCourse:init()
     self.spawnTimer = 0
     self.spawnInterval = 2.0 
     self.minSpawnInterval = 0.7 
-    self.orcaSpawnChance = 0.2 -- chance of an orca spawning
+    self.orcaSpawnProbability = 0.2
 end
 
 function ObstacleCourse:update(dt, difficultyMultiplier)
@@ -17,14 +17,12 @@ function ObstacleCourse:update(dt, difficultyMultiplier)
         obstacle:update(dt, difficultyMultiplier)
     end
 
-    -- Remove inactive obstacles
+    -- Remove inactive obstacles and setting timer for spawning in new ones
     for i = #self.obstacles, 1, -1 do
         if not self.obstacles[i].active then
             table.remove(self.obstacles, i)
         end
     end
-
-    -- Spawn new obstacles
     self.spawnTimer = self.spawnTimer + dt
 
     -- Change spawn based on difficulty
@@ -36,13 +34,13 @@ function ObstacleCourse:update(dt, difficultyMultiplier)
     if self.spawnTimer >= currentInterval then
         self.spawnTimer = 0
         
-        -- Determine if we should spawn an orca or regular obstacle
+        -- Determine if an orca or regular obstacle should be spawned
         local lane = math.random(1, 3)
         local newObstacle
         
-        -- Orca has a chance to spawn that increases with difficulty
+        -- Probability of orca spawning that also increases with difficulty
         local orcaRoll = math.random()
-        local orcaChance = self.orcaSpawnChance * difficultyMultiplier
+        local orcaChance = self.orcaSpawnProbability * difficultyMultiplier
         
         if orcaRoll < orcaChance then
             -- Spawn an orca
@@ -62,7 +60,7 @@ function ObstacleCourse:update(dt, difficultyMultiplier)
                 secondLane = math.random(1, 3)
             end
             
-            -- Don't spawn multiple orcas together
+            -- Making sure that multiple orcas do not spawn together
             table.insert(self.obstacles, Obstacle(secondLane))
         end
     end
@@ -81,6 +79,7 @@ function ObstacleCourse:collision(surfer)
             return true
         end
     end
+    
     return false
 end
 

@@ -79,8 +79,8 @@ function UI:drawScore(score)
     love.graphics.setColor(1, 1, 1, 1)
 end
 
+-- Drawing the amount of lives the player has
 function UI:drawLives(lives)
-    -- Draw lives as icons
     love.graphics.setFont(regularFont)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print("LIVES:", self.livesX, self.livesY)
@@ -89,6 +89,7 @@ function UI:drawLives(lives)
     end
 end
 
+-- Drawing the highest score achieved
 function UI:drawHighScore(highScore)
     love.graphics.setFont(regularFont)
     love.graphics.printf("HIGH SCORE: " .. highScore, 0, gameHeight - 40, gameWidth, "center")

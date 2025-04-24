@@ -5,34 +5,28 @@ local Obstacle = require("objects.Obstacle")
 local Orca = Class{__includes = Obstacle}
 
 function Orca:init(lanePosition)
-    -- Initialize the base obstacle properties
+    -- Initialize the orca properties and changing the type of obstacle
     Obstacle.init(self, lanePosition)
-    
-    -- Override obstacle type
     self.obstacleType = "orca"
     
     -- Load orca spritesheet
     self.spritesheet = love.graphics.newImage("assets/sprites/orcas.png")
     
     -- Calculate frame dimensions based on the spritesheet
-    local frameWidth = math.floor(self.spritesheet:getWidth() / 8 - 10)  -- 8 frames in the spritesheet
+    local frameWidth = math.floor(self.spritesheet:getWidth() / 8 - 10)
     local frameHeight = self.spritesheet:getHeight()
     
     -- Create animation grid
     local grid = anim8.newGrid(frameWidth, frameHeight, self.spritesheet:getWidth(), self.spritesheet:getHeight())
-    
-    -- Create animation with all 8 frames, playing at 10 frames per second
     self.animation = anim8.newAnimation(grid('1-8', 1), 0.1)
     
-    -- Adjust size and speed for orca
+    -- Adjust size and speed for the orca
     self.width = frameWidth
     self.height = frameHeight
     self.speed = 200
 
-    -- Scale for drawing
+    -- Scaling and the hitbox for the orca
     self.scale = 1
-    
-    -- Add a custom hitbox that's smaller than the full orca
     self.hitboxOffsetX = frameWidth * 0.3
     self.hitboxOffsetY = frameHeight * 0.2
     self.hitboxWidth = frameWidth * 0.4
@@ -40,13 +34,11 @@ function Orca:init(lanePosition)
 end
 
 function Orca:update(dt, speedMultiplier)
-    -- Update base movement
+    -- Update base movement and animation
     self.x = self.x - self.speed * speedMultiplier * dt
-    
-    -- Update animation
     self.animation:update(dt)
     
-    -- Mark as inactive when off screen
+    -- Detecting when it goes offscreen to make it inactive
     if self.x + self.width * self.scale < 0 then
         self.active = false
     end
@@ -56,7 +48,7 @@ function Orca:draw()
     -- Draw the orca animation
     self.animation:draw(self.spritesheet, self.x, self.y, 0, self.scale, self.scale, 0, 0)
     
-    -- Draw collision box in debug mode
+    -- Draw collision box for debugging
     if debugFlag then
         love.graphics.setColor(1, 0, 0, 0.5)
         love.graphics.rectangle(
@@ -71,7 +63,7 @@ function Orca:draw()
 end
 
 function Orca:collision(surfer)
-    -- Check for collision with tighter hitbox
+    -- Check for collision
     if not self.active then return false end
     
     -- Calculate orca's actual hitbox position
@@ -81,8 +73,8 @@ function Orca:collision(surfer)
     local orcaHeight = self.hitboxHeight
     
     -- Get surfer's hitbox dimensions
-    local surferScale = 0.1  -- Based on your code
-    local surferHitboxOffsetX = surfer.width * 0.3 * surferScale  -- Adjust based on surfer sprite
+    local surferScale = 0.1
+    local surferHitboxOffsetX = surfer.width * 0.3 * surferScale
     local surferHitboxOffsetY = surfer.height * 0.2 * surferScale
     local surferHitboxWidth = surfer.width * 0.4 * surferScale
     local surferHitboxHeight = surfer.height * 0.6 * surferScale

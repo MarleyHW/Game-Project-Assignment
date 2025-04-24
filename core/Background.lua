@@ -22,7 +22,7 @@ function Background:init()
 end
 
 function Background:update(dt)
-    -- Making sure the sky and waves scroll and wrap properly one after each other
+    -- Making sure the sky and waves scroll and loop properly one after each other
     self.bgSkyPos = (self.bgSkyPos + self.bgSpeed * dt) % self.scaledWidth
     self.bgWavesPos = (self.bgWavesPos + self.bgSpeed * 2 * dt) % self.wavesWidth
 end

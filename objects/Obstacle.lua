@@ -1,5 +1,6 @@
 local Class = require("libs.hump.class")
 local Timer = require("libs.hump.timer")
+
 -- Load obstacle sprites
 local obstacleSprites = {}
 obstacleSprites[1] = love.graphics.newImage("assets/sprites/obstacle_seaweed.png")
@@ -30,7 +31,7 @@ function Obstacle:init(lanePosition)
         self.y = gameHeight - 130
     end
     
-    -- Animation properties
+    -- Properties for animation
     self.rotation = 0
     self.bobHeight = 0
     self.bobDirection = 1
@@ -59,9 +60,11 @@ function Obstacle:update(dt, speedMultiplier)
 end
 
 function Obstacle:draw()
+    -- Drawing the obstacle with scaling
     local scale = 0.1 
     local originX = self.sprite:getWidth() / 2
     local originY = self.sprite:getHeight() / 2
+
     love.graphics.draw(
         self.sprite, 
         self.x + originX * scale, 
@@ -70,6 +73,8 @@ function Obstacle:draw()
         scale, scale, 
         originX, originY
     )
+
+    -- Displaying debug info
     if debugFlag then
         love.graphics.rectangle("line", self.x, self.y, self.width * scale, self.height * scale)
     end

@@ -3,7 +3,7 @@ local Class = require "libs.hump.class"
 local Collectible = Class{}
 
 function Collectible:init(type, lanePosition)
-    -- seashell or lifejacket
+    -- Seashell or lifejacket
     self.type = type 
     -- Load sprite based on type
     if self.type == "seashell" then
@@ -11,12 +11,14 @@ function Collectible:init(type, lanePosition)
     else
         self.sprite = love.graphics.newImage("assets/sprites/lifejacket.png")
     end
+
     -- Position and dimensions
     self.x = gameWidth + 50 
     local baseScale = 0.3
     self.width = self.sprite:getWidth() * baseScale
     self.height = self.sprite:getHeight() * baseScale
-    -- Set vertical position based on lane
+
+    -- Setting positioning for the lane where collectibles can spawn
     if lanePosition == 1 then 
         self.y = gameHeight/2 - 80
     elseif lanePosition == 2 then 
@@ -24,25 +26,27 @@ function Collectible:init(type, lanePosition)
     else 
         self.y = gameHeight/2 + 80
     end
+
     -- Animation properties
     self.rotation = 0
     self.scale = 1
     self.alpha = 1
     self.pulseDirection = 1
+
+    -- Base speed
+    self.speed = 180 
+
     -- Game state
     self.active = true
     self.collected = false
-    -- Base speed
-    self.speed = 180 
 end
 
 function Collectible:update(dt, speedMultiplier)
-    -- Move collectible
+    -- Movement, animating, and pulsing for collectibles
     self.x = self.x - self.speed * speedMultiplier * dt
-    -- Animate collectible
     self.rotation = self.rotation + dt * 2
-    -- Pulse animation
     self.scale = self.scale + self.pulseDirection * dt * 0.5
+
     if self.scale > 1.1 then
         self.scale = 1.1
         self.pulseDirection = -1
@@ -50,6 +54,7 @@ function Collectible:update(dt, speedMultiplier)
         self.scale = 0.9
         self.pulseDirection = 1
     end
+
     -- Deactivate if off screen
     if self.x + self.width < 0 then
         self.active = false
@@ -71,6 +76,7 @@ function Collectible:draw()
 
     -- Reset color
     love.graphics.setColor(1, 1, 1, 1) 
+
     -- Draw debug info
     if debugFlag then
         love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
@@ -81,13 +87,12 @@ function Collectible:collision(surfer)
     -- Check for collision with surfer
     if not self.active or self.collected then return false end
     
+    -- Setting the sizing of the collectibles with scaling
     local baseScale = 0.1
     local collectibleWidth = self.width * baseScale
     local collectibleHeight = self.height * baseScale
-    
     local colX = self.x + collectibleWidth >= surfer.x and surfer.x + surfer.width * 0.15 >= self.x
     local colY = self.y + collectibleHeight >= surfer.y and surfer.y + surfer.height * 0.15 >= self.y
-    
     return colX and colY
 end
 
@@ -97,9 +102,11 @@ local CollectibleSystem = Class{}
 function CollectibleSystem:init()
     self.collectibles = {}
     self.spawnTimer = 0
-    -- Time between collectible spawns (3 seconds)
-    self.spawnInterval = 3.0
-    -- Probability of spawning a lifejacket vs seashell (20% chance)
+
+    -- Time between collectible spawns
+    self.spawnInterval = 3
+
+    -- Probability of spawning a lifejacket vs spawning a seashell
     self.lifejacketProbability = 0.2
 end
 
@@ -109,7 +116,7 @@ function CollectibleSystem:update(dt, difficultyMultiplier)
         collectible:update(dt, difficultyMultiplier)
     end
     
-    -- Remove inactive collectibles
+    -- Remove inactive collectibles that go offscreen
     for i = #self.collectibles, 1, -1 do
         if not self.collectibles[i].active then
             table.remove(self.collectibles, i)
@@ -121,7 +128,7 @@ function CollectibleSystem:update(dt, difficultyMultiplier)
     if self.spawnTimer >= self.spawnInterval then
         self.spawnTimer = 0
         
-        -- Determine collectible type (seashell or lifejacket)
+        -- Determine the type of collectible
         local collectibleType = "seashell"
         if math.random() < self.lifejacketProbability then
             collectibleType = "lifejacket"
@@ -141,7 +148,7 @@ function CollectibleSystem:draw()
 end
 
 function CollectibleSystem:checkCollisions(surfer)
-    -- Check collision with any collectible
+    -- Check if a collectible has been collected
     for i, collectible in ipairs(self.collectibles) do
         if collectible:collision(surfer) then
             collectible.collected = true
@@ -149,6 +156,7 @@ function CollectibleSystem:checkCollisions(surfer)
             return collectible.type
         end
     end
+
     return nil
 end
 

@@ -12,6 +12,7 @@ function ParticleSystem:init()
     self:initCollectSystem()
     self:initWakeSystem()
     self:initLifeJacketSystem()
+
     -- Track active effects
     self.activeEffects = {}
     self.wakeActive = true
@@ -116,6 +117,5 @@ function ParticleSystem:createCollisionEffect(x, y)
     self.splashSystem:setPosition(x, y)
     self.splashSystem:emit(40)
 end
-
 
 return ParticleSystem

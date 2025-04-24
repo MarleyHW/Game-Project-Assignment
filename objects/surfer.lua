@@ -9,31 +9,36 @@ local Surfer = Class{}
 function Surfer:init() 
     -- Position
     self.x = gameWidth * 0.2
-    self.y = gameHeight * 0.8 
-    -- Skins
+    self.y = gameHeight * 0.8
+
+    -- Surfer skins
     self.currentSkin = currentSkin or 1
     self.sprite = surferSprites[self.currentSkin]
     self.width = self.sprite:getWidth()
     self.height = self.sprite:getHeight()
+
     -- Dimensions
     self.sprite = surferSprites[self.currentSkin]
     self.width = self.sprite:getWidth()
     self.height = self.sprite:getHeight()
     self.scale = 0.1
+
     -- Animation state
     self.currentAnimation = "idle"
     self.currentFrame = 1
     self.animationTime = 0
     self.animationSpeed = 0.1
+
     -- Game state
     self.score = 0
     self.lives = 3
     self.invincible = false
     self.invincibleTime = 0
     self.invincibleFlash = 0
+
     -- Movement
     self.moveSpeed = 400
-    self.moveDistance = 100  -- How far to move up/down with each key press
+    self.moveDistance = 100
     self.targetY = self.y
     self.sprites = surferSprites
 end 
@@ -47,7 +52,7 @@ function Surfer:update(dt)
         self.y = self.targetY
     end
     
-    -- Update invincibility
+    -- Update invincibility after colliding with obstacle
     if self.invincible then
         self.invincibleTime = self.invincibleTime - dt
         self.invincibleFlash = self.invincibleFlash + dt
@@ -57,7 +62,7 @@ function Surfer:update(dt)
         end
     end
 
-    -- Check if player is staying within boundary
+    -- Check if player is staying within the boundary
     if self.y < gameHeight / 2 - 80 then
         self.y = gameHeight / 2 - 80
         self.targetY =  gameHeight / 2 - 80
@@ -66,6 +71,7 @@ function Surfer:update(dt)
         self.targetY = gameHeight - 70
     end
 
+    -- Updating timer for scoring
     if self.scoreTimer and self.scoreTimer > 0 then
         self.scoreTimer = self.scoreTimer - dt
         if self.scoreTimer <= 0 then
@@ -75,7 +81,7 @@ function Surfer:update(dt)
 end
 
 function Surfer:draw()
-    -- Flash effect when invincible
+    -- Flash effect to indicate player is invincible
     if self.invincible and math.floor(self.invincibleFlash * 10) % 2 == 0 then
         love.graphics.setColor(1, 1, 1, 0.5)
     else
@@ -84,16 +90,7 @@ function Surfer:draw()
 
     -- Drawing the surfer sprite
     local drawScale = 0.20
-    love.graphics.draw(
-        self.sprite,
-        self.x + 50,
-        self.y,
-        0,
-        drawScale, drawScale,
-        self.width / 2,
-        self.height / 2
-    )
-
+    love.graphics.draw(self.sprite, self.x + 50, self.y, 0, drawScale, drawScale, self.width / 2, self.height / 2)
     love.graphics.setColor(1, 1, 1, 1) 
 
     -- Debug info
@@ -104,12 +101,12 @@ function Surfer:draw()
 end
 
 function Surfer:moveUp()
-    -- Move up by moveDistance, but don't exceed upper boundary
+    -- Move up without exceeding upper boundary
     self.targetY = math.max(5, self.y - self.moveDistance)
 end
 
 function Surfer:moveDown()
-    -- Move down by moveDistance, but don't exceed lower boundary
+    -- Move down without exceeding lower boundary
     self.targetY = math.min(gameHeight - 5, self.y + self.moveDistance)
 end
 
@@ -120,6 +117,7 @@ function Surfer:showScoreIndicator(text)
 end
 
 function Surfer:changeSkin(skinIndex)
+    -- Handling when the player selects a new skin from the skins menu
     self.currentSkin = skinIndex
     self.sprite = self.sprites[self.currentSkin]
     self.width = self.sprite:getWidth()

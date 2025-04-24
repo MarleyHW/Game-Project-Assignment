@@ -86,11 +86,14 @@ function love.load()
     -- Start background music
     sounds['music']:setLooping(true)
     sounds['music']:play()
+
     -- Initialize tweens
     speedTween = Utils.newTween(difficultyMultiplier, 1, 3, 60)
     titleY = gameHeight
     titleTween = tween.new(1.5, {y = titleY}, {y = 60}, 'inCubic')
 end
+
+-- Resizing screen for viewing
 function love.resize(w, h)
     Push:resize(w, h)
 end
@@ -103,13 +106,11 @@ function love.update(dt)
     if scoreTween then
         scoreTween:update(dt)
     end
-    -- Tweening for game over text
     if gameOverTween and gameState == "over" then
-        gameOverTween:update(dt)
+        gameOverTween:update(dt) -- Tweening for game over text
     end
-    -- Tweening for start of game title
     if titleTween and gameState == "start" then
-        titleTween:update(dt)
+        titleTween:update(dt) -- Tweening for game start title
     end
 
     -- Checking game state for displaying animated waves
@@ -124,6 +125,7 @@ function love.update(dt)
         timePlayed = timePlayed + dt
         -- Increase difficulty over time
         difficultyMultiplier = math.min(3, 1 + (timePlayed / 60))
+
         -- Update game objects
         bg:update(dt)
         local drawScale = 0.15
@@ -132,6 +134,7 @@ function love.update(dt)
         obsCourse:update(dt, difficultyMultiplier)
         particles:update(dt)
         collectibles:update(dt, difficultyMultiplier)
+
         -- Check for collecttibles (seashells and life jackets)
         local collectedType = collectibles:checkCollisions(surfer)
         if collectedType == "seashell" then
@@ -145,6 +148,7 @@ function love.update(dt)
             lives = math.min(maxLives, lives + 1)
             surfer:showScoreIndicator("+1")
         end
+
         -- Handle obstacle collision with invincibility
         if obsCourse:collision(surfer) and not surfer.invincible then
             particles:createCollisionEffect(surfer.x, surfer.y)
@@ -156,6 +160,7 @@ function love.update(dt)
             surfer.invincibleTime = 2
             surfer.invincibleFlash = 0
 
+            -- If the player collides with a collision on their last life, change state to gameover
             if lives <= 0 then
                 sounds["gameover"]:play()
                 gameState = "over"
@@ -163,16 +168,17 @@ function love.update(dt)
                 lastScore = currentScore
                 skins:checkUnlocks(currentScore)
 
-                gameOverY = -200  -- Start offscreen
+                -- Tweening gameover text
+                gameOverY = -200
                 gameOverTween = tween.new(1.2, {y = gameOverY}, {y = 60}, 'outBounce')
             end
         end
 
-        -- Update score based on time
         handleScoring(dt)
     end
 end
 
+-- Increase score by 1 every second
 function handleScoring(dt)
     currentScore = currentScore + dt
 end
@@ -241,6 +247,7 @@ function drawPlayState()
     surfer:draw()
     drawPlayUI()
 
+    -- Debugging game
     if debugFlag then
         love.graphics.print("FPS: "..love.timer.getFPS(), 10, gameHeight-20)
         love.graphics.print("Difficulty: "..string.format("%.2f", difficultyMultiplier), 10, gameHeight-40)
@@ -248,8 +255,8 @@ function drawPlayState()
     end
 end
 
+-- Show score and lives while playing
 function drawPlayUI()
-    -- Show score and lives
     love.graphics.print("Score: "..math.floor(currentScore), scoreFont, 10, 10)
     love.graphics.print("Lives: "..lives, scoreFont, 10, 40)
 end
@@ -271,8 +278,6 @@ function drawGameOverState()
         gameOverTween:update(love.timer.getDelta())
         gameOverY = gameOverTween.subject.y
     end
-
-    -- Title with tweened Y position
     love.graphics.setFont(titleFont)
     love.graphics.setColor(0, 0, 0)
     love.graphics.printf("Wipeout!", 0, gameOverY, gameWidth, "center")
@@ -309,11 +314,10 @@ function drawSkinsMenu()
     love.graphics.printf("Surfer Skins", titleFont, 0, 60, gameWidth, "center")
     love.graphics.printf("Press Enter to select", instructionFont, 0, 480, gameWidth, "center")
     love.graphics.printf("Press B to go back", instructionFont, 0, 510, gameWidth, "center")
-
     love.graphics.setFont(scoreFont)
     love.graphics.printf("High Score: " .. math.floor(highScore), 0, 400, gameWidth, "center")
-
     love.graphics.setColor(1, 1, 1, 1)
+
     -- Drawing the surfer skins
     skins:draw()
 end
@@ -325,10 +329,12 @@ function drawPauseState()
 end
 
 function resetGame()
+    -- Resetting player and obstacles
     surfer = Surfer()
     obsCourse = ObstacleCourse()
     particles = ParticleSystem()
-    
+
+    -- Start over from the beginning
     lives = 3
     currentScore = 0
     difficultyMultiplier = 1
